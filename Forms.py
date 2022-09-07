@@ -124,6 +124,45 @@ class Patient_create(FlaskForm):
         if not re.match("^[a-zA-Z0-9,. ]*$", address.data):
             raise ValidationError("Address can only contain alphabets, numbers, comma and periods!")
 
+class Doctor_create(FlaskForm):
+    doctor_name = StringField('doctor name0', validators=[
+                               DataRequired('please enter name')])
+    doctor_speciality = StringField('doctor speciality', validators=[
+                               DataRequired('please enter specialites')])
+    qualify_n_experience = StringField('qualify n experience', validators=[
+                               DataRequired('please enter experience')])
+    submit = SubmitField('create')
+
+
+class Appointment_create(FlaskForm):
+    doctor_name = StringField('doctor name0', validators=[
+                               DataRequired('please enter name')])
+    doctor_specialization = StringField('doctor_spec name0', validators=[
+                               DataRequired('please enter name')])
+    appointer_father_name = StringField('appointer name1', validators=[
+                               DataRequired('please enter name')])
+    patient_age = IntegerField('patient age', widget=widgets.Input(input_type="number"), validators=[DataRequired(
+        'please enter age'), check_length(min=1, max=3, message="age should be 1-3 digits long")])
+    date = DateField('enter date', format="%Y-%m-%d", validators=[
+                     DataRequired('please enter date')], default=datetime.date.today())
+    Type_of_bed = SelectField('bed type0', choices=[('dep0', 'dep0'), (
+        'DEP1', 'dep2'), ('single room', 'single room')], validators=[DataRequired('select ward type')])
+    address = StringField('enter address', validators=[
+                          DataRequired('enter the address')])
+    submit = SubmitField('create')
+
+    def validate_date(form, date):
+        if date.data > datetime.date.today():
+            raise ValidationError("Date of Admission cannot exceed today's date!")
+
+    def validate_patient_name(form,patient_name):
+        if not patient_name.data.isalpha():
+            raise ValidationError("Name cannot contain numbers/ symbols")
+
+    def validate_address(form,address):
+        if not re.match("^[a-zA-Z0-9,. ]*$", address.data):
+            raise ValidationError("Address can only contain alphabets, numbers, comma and periods!")
+
 
 # class for delete patient form
 class Patient_delete(FlaskForm):

@@ -1,49 +1,46 @@
 {% extends 'layout.html' %}
 
 {% block head %}
-<script src="../static/js/cities.js"></script>
+<!--<script src="../static/js/cities.js"></script>-->
 {% endblock %}
 
 {% block content %}
 <div class="container login-container">
     <div>
         <div class="login-form-2 text-center">
-            <h3>Patient Appointment</h3>
-            <form name="patient" method="POST" action="/CreatePatient" id="form1">
+            <h3>Patient Registration</h3>
+            <form name="doctor" method="POST" action="/CreateDoctor" id="form1">
                 {{form.hidden_tag()}}
-
                 <div class="form-group">
                     {{"Doctor Name"}}
-                    {{form.doctor_name.label}}
                     {{form.doctor_name(class_="form-control",placeholder="Doctor Name")}}
                     {% for err in form.doctor_name.errors %}
                     <span style="color: red;">[{{ err }}]</span>
-                    {% endfor %}
+                    
+                     {% endfor %}
                 </div>
                 <div class="form-group">
-                    {{"Doctor Specialization"}}
-                    {{form.doctor_specialization.label}}
-                    {{form.doctor_specialization(class_="form-control",placeholder="Doctor Name")}}
-                    {% for err in form.doctor_specialization.errors %}
-                    <span style="color: red;">[{{ err }}]</span>
-                    {% endfor %}
-                </div>
-                <div class="form-group">
-                    {{"Father Name"}}
-                    {{form.appointer_father_name(class_="form-control",placeholder="Father Name")}}
-                    {% for err in form.appointer_father_name.errors %}
+                    {{"Doctor Speciality"}}
+                    {{form.doctor_speciality(class_="form-control",placeholder="Doctor Speciality")}}
+                    {% for err in form.doctor_speciality.errors %}
                     <span style="color: red;">[{{ err }}]</span>
 
-                    {% endfor %}
+                     {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{"Doctor Qualification and Experience"}}
+                    {{form.qualify_n_experience(class_="form-control",placeholder="Doctor Name")}}
+                    {% for err in form.qualify_n_experience.errors %}
+                    <span style="color: red;">[{{ err }}]</span>
+
+                     {% endfor %}
                 </div>
                 <div class="form-group" style="display: inline;">
                     {{form.submit(class="btnSubmit")}}
-                    <input type="button" class="btnSubmit text-center" value="🔃 Reset " onclick="Reset()"
-                           style="float: right; width: 40%;"/>
+                    <input type ="button" class="btnSubmit text-center" value="🔃 Reset " onclick="Reset()" style="float: right; width: 40%;"/>                    
                 </div>
             </form>
         </div>
-
     </div>
 </div>
 {% endblock %}
@@ -53,11 +50,6 @@
     function Reset() {
       document.getElementById("form1").reset();
     }
-
-
-
-
-
 </script>
-<script language="javascript">print_state("sts");</script>
+<!--<script language="javascript">print_state("sts");</script>-->
 {% endblock %}

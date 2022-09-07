@@ -1,8 +1,9 @@
 from . import app
 from datetime import datetime, date
 from flask import render_template, session, url_for, request, redirect, flash, session, g
-from .Forms import Login_form, Patient_create, Patient_delete, delete_result, Patient_update, issue_medicine_form, add_diagnosis
-from .Models import UserStore, Patient_test, Patient_Medicine, Patient_details, Diagnosis, Medicine
+from .Forms import Login_form, Patient_create, Patient_delete, delete_result, Patient_update, issue_medicine_form, \
+    add_diagnosis, Appointment_create, Doctor_create
+from .Models import UserStore, Patient_test, Patient_Medicine, Patient_details, Diagnosis, Medicine, Doctor_details
 from .Config import db
 
 # store patient ID for querying
@@ -80,7 +81,7 @@ def appointment():
     #     return redirect(url_for('main'))
 
     # If form has been submitted
-    form = Patient_create()
+    form = Appointment_create()
     if request.method == 'POST':
         if form.validate_on_submit():
             ssn_id = form.ssn_id.data
@@ -97,7 +98,7 @@ def appointment():
             db.session.add(details)
             db.session.commit()
             flash("Registration successfully", "success")
-    return render_template("Appointment_patient.html", title="Create Patient", form=form)
+    return render_template("Appointment_patient.html", title="Create Appointment", form=form)
 
 
     # return render_template("Appointment_patient.html", title="Create Patient")
@@ -135,6 +136,30 @@ def create_patient():
             db.session.commit()
             flash("Registration successfully", "success")
     return render_template("create_patient.html", title="Create Patient", form=form)
+
+@app.route("/CreateDoctor", methods=['GET', 'POST'])
+def create_doctor():
+
+
+    # Check that an authorised user only can access this functionality
+    # if check_session() != 'registration_desk_executive':
+    #     flash('You are not authorised to access that! Please login with proper credentials.', 'danger')
+    #     return redirect(url_for('main'))
+
+    # If form has been submitted
+    form = Doctor_create()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            doctor_name = form.doctor_name.data
+            doctor_speciality = form.doctor_speciality.data
+            qualify_n_experience = form.qualify_n_experience.data
+
+            # Add the patient to the database
+            details = Doctor_details(doctor_name, doctor_speciality, qualify_n_experience)
+            # db.session.add(details)
+            # db.session.commit()
+            flash("Registration successfully", "success")
+    return render_template("create_doctor.html", title="Create Doctor", form=form)
 
 
 # ==================================================================================

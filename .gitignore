@@ -1,5 +1,6 @@
 #Virtual ENV
 .hms
+.idea/
 env/
 #_pycache_
 __pycache__

@@ -13,6 +13,21 @@ class UserStore(db.Model):
         return 'User ' + str(self.id)
 
 # PatientDetails
+class Doctor_details(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(45), nullable=False)
+    speciality = db.Column(db.String(100), nullable=False)
+    experience = db.Column(db.String(500), nullable=False)
+
+    def __init__(self, name, speciality, experience):
+        self.name = name
+        self.speciality = speciality
+        self.experience = experience
+
+    def __repr__(self):
+        return 'Doctor ' + str(self.id) + str(self.name)
+
+
 class Patient_details(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(45), nullable=False)
