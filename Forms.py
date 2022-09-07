@@ -135,8 +135,8 @@ class Doctor_create(FlaskForm):
 
 
 class Appointment_create(FlaskForm):
-    doctor_name = StringField('doctor name0', validators=[
-                               DataRequired('please enter name')])
+    doctor_name = SelectField('doctor name0', validators=[
+                               DataRequired('please select doctor')])
     doctor_specialization = StringField('doctor_spec name0', validators=[
                                DataRequired('please enter name')])
     appointer_father_name = StringField('appointer name1', validators=[

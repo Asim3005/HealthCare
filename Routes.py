@@ -81,14 +81,17 @@ def appointment():
     #     return redirect(url_for('main'))
 
     # If form has been submitted
+    doctors = Doctor_details.query.all()
     form = Appointment_create()
+    doctor_choices = [(doctor.name, doctor.name) for doctor in doctors]
+    speciality = [doctor.speciality for doctor in doctors]
+    form.doctor_name.choices = choices=doctor_choices
     if request.method == 'POST':
         if form.validate_on_submit():
             ssn_id = form.ssn_id.data
             name = form.patient_name.data
             age = form.patient_age.data
             date = form.date.data
-            bed_type = form.Type_of_bed.data
             address = form.address.data
             state = request.form.get('stt')
             city = request.form.get('state_list')
