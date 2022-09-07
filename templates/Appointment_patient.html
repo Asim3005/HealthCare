@@ -8,11 +8,19 @@
 <div class="container login-container">
     <div>
         <div class="login-form-2 text-center">
-            <h3>Patient Registration</h3>
+            <h3>Patient Appointment</h3>
             <form name="patient" method="POST" action="/CreatePatient" id="form1">
                 {{form.hidden_tag()}}
+        
                 <div class="form-group">
-                    {{"First Name"}}
+                    {{form.ssn_id.label}}
+                    {{form.ssn_id(class_="form-control",placeholder="CNIC")}}
+                    {% for err in form.ssn_id.errors %}
+                    <span style="color: red;">[{{ err }}]</span>
+                     {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{form.patient_name.label}}
                     {{form.patient_name(class_="form-control",placeholder="First Name")}}
                     {% for err in form.patient_name.errors %}
                     <span style="color: red;">[{{ err }}]</span>
@@ -20,37 +28,38 @@
                      {% endfor %}
                 </div>
                 <div class="form-group">
-                    {{"Middle name"}}
-                    {{form.patient_name(class_="form-control",placeholder="Middle name")}}
+                    {{"middle name"}}
+                    {{form.patient_name(class_="form-control",placeholder="Middle name0")}}
                     {% for err in form.patient_name.errors %}
                     <span style="color: red;">[{{ err }}]</span>
                     
                      {% endfor %}
                 </div>
                 <div class="form-group">
-                    {{"Last Name"}}
-                    {{form.patient_name(class_="form-control",placeholder="Last name")}}
+                    {{form.patient_name.label}}
+                    {{form.patient_name(class_="form-control",placeholder="Patient name0")}}
                     {% for err in form.patient_name.errors %}
                     <span style="color: red;">[{{ err }}]</span>
                     
                      {% endfor %}
                 </div>
                 <div class="form-group">
-                    {{"CNIC No"}}
-                    {{form.ssn_id(class_="form-control",placeholder="CNIC")}}
-                    {% for err in form.ssn_id.errors %}
-                    <span style="color: red;">[{{ err }}]</span>
-                     {% endfor %}
-                </div>
+                    <div class="input-box2">
+                        <br>
+                        <input type="text" placeholder="First Name" required class="field1">
+                        <input type="text" placeholder="Middle Name" required class="field1">
+                        <input type="text" placeholder="Last Name" required class="field1">
+        
+                    </div>
                 <div class="form-group">
-                    {{"Patient Age"}}
+                    {{form.patient_age.label}}
                     {{form.patient_age(class_="form-control",placeholder="Age")}}
                     {% for err in form.patient_age.errors %}
                     <span style="color: red;">[{{ err }}]</span>
                      {% endfor %}
                 </div>
                 <div class="form-group">
-                    {{"Enter Date"}}
+                    {{form.date.label}}
                     {{form.date(class_="form-control",placeholder="CCYY-MM-DD")}}
                     {% for err in form.date.errors %}
                     <span style="color: red;">[{{ err }}]</span>
@@ -64,7 +73,7 @@
                      {% endfor %}
                 </div>
                 <div class="form-group">
-                    {{"Postal Address"}}
+                    {{form.address.label}}
                     {{form.address(class_="form-control",placeholder="Address")}}
                     {% for err in form.address.errors %}
                     <span style="color: red;">[{{ err }}]</span>
@@ -74,7 +83,6 @@
                     <span class="details">Father Name</span>
                     <input type="text" placeholder="Enter your Father name" required>
                 </div>
-                <br>
                 <div class="input-box">
                     <span class="details">Email Address</span>
                     <input type="text" placeholder="Enter your Email Address" required>
@@ -82,8 +90,12 @@
                 <br>
                 <div class="details">
 
-                    <span class="gender-title">Gender Details </span>
+                    <span class="details">gender</span>
+
+                    <span class="gender-title">Gender</span>
                     <br>
+                    <br>
+
                     <input type="radio" name="gender" id="dot-1" value="male">
                     <label for="dot-1">
                         <span class="dot-1"></span>
@@ -94,16 +106,17 @@
                         <span class="dot-2"></span>
                         <span class="gender">Female</span>
                     </label>
-                    <input type="radio" name="gender" id="dot-3" value="Not perfer">
+                    <input type="radio" name="gender" id="dot-3" value="perfer">
 
 
 
                     <label for="dot-3">
                         <span class="dot-3"></span>
-                        <span class="gender">Not Prefer</span>
+                        <span class="gender">Prefer</span>
                     </label>
+
+
                 </div>
-                <br>
                 <div class="input-box">
                     <span class="details">Blood Group</span>
                     <label for="bl-names">Choose a blood group:</label>
@@ -115,17 +128,20 @@
                     </select>
     
                 </div>
-                <br>
                 <div class="input-box">
                     <span class="details">Emergency Phone Number</span>
                     <input type="text" placeholder="Enter your Emergency Phone number" required>
                 </div>
-                <br>
                 <div>
                     <span class="details">Payment Mode</span>
                     <form>
 
                         <div class="details">
+
+
+                            <span class="mode-title">Mode</span>
+                            <br>
+                            <br>
 
                             <input type="radio" name="pmode1" id="dotp-1" value="Cash">
                             <label for="dot-1">
@@ -140,19 +156,16 @@
 
 
                         </div>
-                        <br>
                         <form>
                 </div>
                 <div class="input-box">
                     <span class="details">Password</span>
                     <input type="text" placeholder="Enter your password" required>
                 </div>
-                <br>
                 <div class="input-box">
                     <span class="details">Confirm Password</span>
                     <input type="text" placeholder="Confirm your Password" required>
                 </div>
-                <br>
                 <div class="form-group">
                     <label for="stt">Select State</label>
                     <select onchange="print_city('state', this.selectedIndex);" id="sts" name ="stt" class="form-control" required></select>                   
@@ -170,6 +183,125 @@
             </form>
         </div>
     </div>
+</div>
+<!------>
+<div class="container">
+    <div class="title">Registartion </div>
+    <form action="#">
+        <div class="user-details">
+            <span class="details">Name</span>
+
+            <div class="input-box2">
+                <br>
+                <input type="text" placeholder="First Name" required class="field1">
+                <input type="text" placeholder="Middle Name" required class="field1">
+                <input type="text" placeholder="Last Name" required class="field1">
+
+            </div>
+
+            <div class="input-box">
+                <br><br>
+                <span class="details">CNIC No</span>
+                <input type="text" placeholder="Enter your CNIC No" required>
+            </div>
+            <div class="input-box">
+                <span class="details">Father Name</span>
+                <input type="text" placeholder="Enter your Father name" required>
+            </div>
+            <div class="input-box">
+                <span class="details">Blood Group</span>
+                <label for="bl-names">Choose a blood group:</label>
+                <select name="bl-names" id="bl-names">
+                    <option value="rigatoni">A</option>
+                    <option value="dave">B</option>
+                    <option value="pumpernickel">O</option>
+                    <option value="reeses">AB</option>
+                </select>
+
+            </div>
+            <div class="input-box">
+                <span class="details">Email Address</span>
+                <input type="text" placeholder="Enter your Email Address" required>
+            </div>
+            <form>
+
+                <div class="details">
+
+
+                    <span class="gender-title">Gender</span>
+                    <br>
+                    <br>
+
+                    <input type="radio" name="gender" id="dot-1" value="male">
+                    <label for="dot-1">
+                        <span class="dot-1"></span>
+                        <span class="gender">Male</span>
+                    </label>
+                    <input type="radio" name="gender" id="dot-2" value="female">
+                    <label for="dot-2">
+                        <span class="dot-2"></span>
+                        <span class="gender">Female</span>
+                    </label>
+                    <input type="radio" name="gender" id="dot-3" value="perfer">
+
+
+
+                    <label for="dot-3">
+                        <span class="dot-3"></span>
+                        <span class="gender">Prefer</span>
+                    </label>
+
+
+                </div>
+                <form>
+                    <br>
+
+
+
+                    <div class="input-box">
+                        <span class="details">Emergency Phone Number</span>
+                        <input type="text" placeholder="Enter your Emergency Phone number" required>
+                    </div>
+                    <div>
+                        <span class="details">Payment Mode</span>
+                        <form>
+
+                            <div class="details">
+
+
+                                <span class="mode-title">Mode</span>
+                                <br>
+                                <br>
+
+                                <input type="radio" name="pmode1" id="dotp-1" value="Cash">
+                                <label for="dot-1">
+                                    <span class="dot-1"></span>
+                                    <span class="gender">Cash</span>
+                                </label>
+                                <input type="radio" name="pmode2" id="dotp-2" value="CARD">
+                                <label for="dot-2">
+                                    <span class="dot-2"></span>
+                                    <span class="gender">Card</span>
+                                </label>
+
+
+                            </div>
+                            <form>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Password</span>
+                        <input type="text" placeholder="Enter your password" required>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Confirm Password</span>
+                        <input type="text" placeholder="Confirm your Password" required>
+                    </div>
+        </div>
+        <div class="button">
+            <input type="submit" value="Register">
+        </div>
+    </form>
+
 </div>
 {% endblock %}
 

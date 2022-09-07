@@ -134,12 +134,11 @@ Contributions are what make the open source community such an amazing place to b
 <!-- CONTACT -->
 ## Contact
 
-* RamVignesh B. - [![linkedin-shield]](https://linkedin.com/in/ramvigneshb) - ramvignesh.codes@gmail.com
-* Ayush Saini - [![linkedin-shield]](https://www.linkedin.com/in/ayush-saini-570345137/) - ayushgd@gmail.com
-* Vibhor Aggarwal - [![linkedin-shield]](https://www.linkedin.com/in/vibhor-aggarwal-6585a5185/) - vibhor.msn@gmail.com
-* Chittaranjan Sahu - [![linkedin-shield]](https://www.linkedin.com/in/chittaranjan-sahu-7a7289129/) - @gmail.com
 
-Project Link: [https://github.com/ayushgd/hms](https://github.com/ayushgd/repo_name)
+
+Project Link: [HealthCare](https://github.com/Asim3005/HealthCare)
+
+Email: [asimmushtaq3005@gmail.com](mailto:asimmushtaq3005@gmail.com)
 
 
 <!-- ACKNOWLEDGEMENTS -->

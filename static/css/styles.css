@@ -1,7 +1,7 @@
 :root{
-  --main-color: #abd6da;
+  --main-color: #d3e0d2;
   --dark: #111;
-  --origin: #2e8690;
+  --origin: #649196;
   --darkless: #90c7ce;
   --light: #e7fdff;
   --grey: rgb(136, 136, 136);
@@ -363,3 +363,4 @@ table.table-bordered > tbody > tr > td{
 table.table-bordered > tbody > tr > th{
   border:2px solid var(--darkless);
 }
+

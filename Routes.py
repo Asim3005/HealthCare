@@ -68,18 +68,16 @@ def index():
         return redirect(url_for('main'))
     return render_template("index.html")
 
-# ==================================================================================
-#                                 Patient Registration
-# ==================================================================================
 
-
-@app.route("/CreatePatient", methods=['GET', 'POST'])
-def create_patient():
+@app.route("/Appointment", methods=['GET', 'POST'])
+def appointment():
+    
+    # return render_template("Appointment_patient.html")
 
     # Check that an authorised user only can access this functionality
-    if check_session() != 'registration_desk_executive':
-        flash('You are not authorised to access that! Please login with proper credentials.', 'danger')
-        return redirect(url_for('main'))
+    # if check_session() != 'registration_desk_executive':
+    #     flash('You are not authorised to access that! Please login with proper credentials.', 'danger')
+    #     return redirect(url_for('main'))
 
     # If form has been submitted
     form = Patient_create()
@@ -98,7 +96,44 @@ def create_patient():
                 name, age, ssn_id, date, bed_type, address, city, state, status="Admitted")
             db.session.add(details)
             db.session.commit()
-            flash("Patient creation initiated successfully", "success")
+            flash("Registration successfully", "success")
+    return render_template("Appointment_patient.html", title="Create Patient", form=form)
+
+
+    # return render_template("Appointment_patient.html", title="Create Patient")
+
+# ==================================================================================
+#                                 Patient Appointment
+# ==================================================================================
+
+
+@app.route("/CreatePatient", methods=['GET', 'POST'])
+def create_patient():
+
+
+    # Check that an authorised user only can access this functionality
+    # if check_session() != 'registration_desk_executive':
+    #     flash('You are not authorised to access that! Please login with proper credentials.', 'danger')
+    #     return redirect(url_for('main'))
+
+    # If form has been submitted
+    form = Patient_create()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            ssn_id = form.ssn_id.data
+            name = form.patient_name.data
+            age = form.patient_age.data
+            date = form.date.data
+            bed_type = form.Type_of_bed.data
+            address = form.address.data
+            state = request.form.get('stt')
+            city = request.form.get('state_list')
+            # Add the patient to the database
+            details = Patient_details(
+                name, age, ssn_id, date, bed_type, address, city, state, status="Admitted")
+            db.session.add(details)
+            db.session.commit()
+            flash("Registration successfully", "success")
     return render_template("create_patient.html", title="Create Patient", form=form)
 
 

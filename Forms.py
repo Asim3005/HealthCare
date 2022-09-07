@@ -100,14 +100,14 @@ class check_length(FlaskForm):
 class Patient_create(FlaskForm):
     ssn_id = IntegerField('ssn id', validators=[DataRequired(
         'please enter SSN ID in integer format'), check_length(message="id must be 9 digits long", min=9, max=9)])
-    patient_name = StringField('patient name', validators=[
+    patient_name = StringField('patient name0', validators=[
                                DataRequired('please enter name')])
     patient_age = IntegerField('patient age', widget=widgets.Input(input_type="number"), validators=[DataRequired(
         'please enter age'), check_length(min=1, max=3, message="age should be 1-3 digits long")])
     date = DateField('enter date', format="%Y-%m-%d", validators=[
                      DataRequired('please enter date')], default=datetime.date.today())
-    Type_of_bed = SelectField('bed type', choices=[('General ward', 'General ward'), (
-        'Semi sharing', 'Semi sharing'), ('single room', 'single room')], validators=[DataRequired('select ward type')])
+    Type_of_bed = SelectField('bed type0', choices=[('dep0', 'dep0'), (
+        'DEP1', 'dep2'), ('single room', 'single room')], validators=[DataRequired('select ward type')])
     address = StringField('enter address', validators=[
                           DataRequired('enter the address')])
     submit = SubmitField('create')
@@ -138,13 +138,13 @@ class delete_result(FlaskForm):
 
 
 class Patient_update(FlaskForm):
-    patient_name = StringField('patient name', validators=[
+    patient_name = StringField('patient name0', validators=[
                                DataRequired('please enter name')])
     patient_age = IntegerField('patient age', widget=widgets.Input(input_type="number"), validators=[
                                DataRequired('please enter age'), check_length(min=1, max=3, message="age should be 1-3 digits long")])
     date = DateField('enter date', format="%Y-%m-%d", validators=[
                      DataRequired('please enter date')], default=datetime.date.today())
-    Type_of_bed = SelectField('bed type', choices=[('General ward', 'General ward'), (
+    Type_of_bed = SelectField('bed type0', choices=[('General ward', 'General ward'), (
         'Semi sharing', 'Semi sharing'), ('single room', 'single room')], validators=[DataRequired('select ward type')])
     address = StringField('enter address', validators=[
                           DataRequired('enter the address')])
