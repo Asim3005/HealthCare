@@ -156,8 +156,8 @@ def create_doctor():
 
             # Add the patient to the database
             details = Doctor_details(doctor_name, doctor_speciality, qualify_n_experience)
-            # db.session.add(details)
-            # db.session.commit()
+            db.session.add(details)
+            db.session.commit()
             flash("Registration successfully", "success")
     return render_template("create_doctor.html", title="Create Doctor", form=form)
 
