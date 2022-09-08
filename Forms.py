@@ -141,6 +141,9 @@ class Appointment_create(FlaskForm):
                                DataRequired('please select doctor')])
     doctor_specialization = StringField('doctor_spec name0', validators=[
                                DataRequired('please enter name')])
+    date = DateField('enter date', format="%Y-%m-%d", validators=[
+        DataRequired('please enter date')], default=datetime.date.today())
+
     hemo = FloatField('hemoglobin')
     bmi = FloatField('bmi')
     platelets = FloatField('platelets')
@@ -159,8 +162,8 @@ class Appointment_create(FlaskForm):
     submit = SubmitField('create')
 
     def validate_date(form, date):
-        if date.data > datetime.date.today():
-            raise ValidationError("Date of Admission cannot exceed today's date!")
+        if date.data < datetime.date.today():
+            raise ValidationError("Date of Appointment should be in future!")
 
     def validate_patient_name(form,patient_name):
         if not patient_name.data.isalpha():

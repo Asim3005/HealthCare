@@ -32,24 +32,26 @@ class Appointments(db.Model):
     patient_name = db.Column(db.String(45), nullable = False)
     doctor_name = db.Column(db.String(45), nullable = False)
     doctor_specialization = db.Column(db.String(100), nullable = False)
+    date = db.Column(db.DateTime, nullable = True)
     hemo = db.Column(db.Float, nullable = True)
     bmi = db.Column(db.Float, nullable = True)
     platelets = db.Column(db.Float, nullable = True)
     blood_sugar = db.Column(db.Float, nullable = True)
     blood_pressure = db.Column(db.Float, nullable = True)
 
-    def __init__(self,patient_name, doctor_name, doctor_specialization, hemo, bmi, platelets, blood_sugar, blood_pressure):
+    def __init__(self,patient_name, doctor_name, doctor_specialization, date, hemo, bmi, platelets, blood_sugar, blood_pressure):
         self.blood_sugar = blood_sugar
         self.blood_pressure = blood_pressure
         self.platelets = platelets
         self.bmi = bmi
         self.hemo = hemo
+        self.date = date
         self.doctor_specialization = doctor_specialization
         self.doctor_name = doctor_name
         self.patient_name = patient_name
 
     def __repr__(self):
-        return f'Appointment of {self.patient_name} with ' + str(self.doctor_name)
+        return f'Appointment of {self.patient_name} with {self.doctor_name} on {self.date}'
 
 
 

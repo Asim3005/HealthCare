@@ -92,6 +92,7 @@ def appointment():
             doctor_name = form.doctor_name.data
             patient_name = form.patient_name.data
             doctor_specialization = form.doctor_specialization.data
+            date = form.date.data
             hemo = form.hemo.data
             bmi = form.bmi.data
             platelets = form.platelets.data
@@ -104,7 +105,7 @@ def appointment():
             if appointments_for_doctors >= 15:
                 flash("Doctor is pre-booked", "warning")
             else:
-                details = Appointments(patient_name,doctor_name,doctor_specialization,hemo,bmi,platelets,blood_sugar,blood_pressure)
+                details = Appointments(patient_name,doctor_name,doctor_specialization,date, hemo,bmi,platelets,blood_sugar,blood_pressure)
                 db.session.add(details)
                 db.session.commit()
                 flash("Appointment Created successfully", "success")
