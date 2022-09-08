@@ -9,9 +9,17 @@
     <div>
         <div class="login-form-2 text-center">
             <h3>Patient Appointment</h3>
-            <form name="patient" method="POST" action="/CreatePatient" id="form1">
+            <form name="patient" method="POST" action="/Appointment" id="form1">
                 {{form.hidden_tag()}}
 
+                <div class="form-group">
+                    {{"Patient Name"}}
+                    {{form.patient_name.label}}
+                    {{form.patient_name(class_="form-control",placeholder="Patient Name")}}
+                    {% for err in form.patient_name.errors %}
+                    <span style="color: red;">[{{ err }}]</span>
+                    {% endfor %}
+                </div>
                 <div class="form-group">
                     {{"Doctor Name"}}
                     {{form.doctor_name.label}}
@@ -29,9 +37,40 @@
                     {% endfor %}
                 </div>
                 <div class="form-group">
-                    {{"Father Name"}}
-                    {{form.appointer_father_name(class_="form-control",placeholder="Father Name")}}
-                    {% for err in form.appointer_father_name.errors %}
+                    {{"Hemoglobin"}}
+                    {{form.hemo(class_="form-control",placeholder="Hemoglobin")}}
+                    {% for err in form.hemo.errors %}
+                    <span style="color: red;">[{{ err }}]</span>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{"BMI"}}
+                    {{form.bmi(class_="form-control",placeholder="BMI")}}
+                    {% for err in form.bmi.errors %}
+                    <span style="color: red;">[{{ err }}]</span>
+
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{"platelets"}}
+                    {{form.platelets(class_="form-control",placeholder="platelets")}}
+                    {% for err in form.platelets.errors %}
+                    <span style="color: red;">[{{ err }}]</span>
+
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{"Blood Sugar"}}
+                    {{form.blood_sugar(class_="form-control",placeholder="Blood Sugar")}}
+                    {% for err in form.blood_sugar.errors %}
+                    <span style="color: red;">[{{ err }}]</span>
+
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{"Blood Pressure"}}
+                    {{form.blood_pressure(class_="form-control",placeholder="Blood Pressure")}}
+                    {% for err in form.blood_pressure.errors %}
                     <span style="color: red;">[{{ err }}]</span>
 
                     {% endfor %}

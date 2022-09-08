@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, IntegerField, SelectField
+from wtforms import StringField, PasswordField, SubmitField, IntegerField, SelectField, FloatField
 from wtforms.validators import DataRequired, Email, Length, ValidationError
 import datetime
 from wtforms.fields.html5 import DateField, widgets
@@ -135,20 +135,27 @@ class Doctor_create(FlaskForm):
 
 
 class Appointment_create(FlaskForm):
+    patient_name = StringField('patient name0', validators=[
+                               DataRequired('please enter your name')])
     doctor_name = SelectField('doctor name0', validators=[
                                DataRequired('please select doctor')])
     doctor_specialization = StringField('doctor_spec name0', validators=[
                                DataRequired('please enter name')])
-    appointer_father_name = StringField('appointer name1', validators=[
-                               DataRequired('please enter name')])
-    patient_age = IntegerField('patient age', widget=widgets.Input(input_type="number"), validators=[DataRequired(
-        'please enter age'), check_length(min=1, max=3, message="age should be 1-3 digits long")])
-    date = DateField('enter date', format="%Y-%m-%d", validators=[
-                     DataRequired('please enter date')], default=datetime.date.today())
-    Type_of_bed = SelectField('bed type0', choices=[('dep0', 'dep0'), (
-        'DEP1', 'dep2'), ('single room', 'single room')], validators=[DataRequired('select ward type')])
-    address = StringField('enter address', validators=[
-                          DataRequired('enter the address')])
+    hemo = FloatField('hemoglobin')
+    bmi = FloatField('bmi')
+    platelets = FloatField('platelets')
+    blood_sugar = FloatField('blood_sugar')
+    blood_pressure = FloatField('blood_pressure')
+    # appointer_father_name = StringField('appointer name1', validators=[
+    #                            DataRequired('please enter name')])
+    # patient_age = IntegerField('patient age', widget=widgets.Input(input_type="number"), validators=[DataRequired(
+    #     'please enter age'), check_length(min=1, max=3, message="age should be 1-3 digits long")])
+    # date = DateField('enter date', format="%Y-%m-%d", validators=[
+    #                  DataRequired('please enter date')], default=datetime.date.today())
+    # Type_of_bed = SelectField('bed type0', choices=[('dep0', 'dep0'), (
+    #     'DEP1', 'dep2'), ('single room', 'single room')], validators=[DataRequired('select ward type')])
+    # address = StringField('enter address', validators=[
+    #                       DataRequired('enter the address')])
     submit = SubmitField('create')
 
     def validate_date(form, date):

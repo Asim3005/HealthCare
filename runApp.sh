@@ -1,5 +1,3 @@
-python3 -m venv .
-
 pip3 install -r requirements.txt
 
 killall -9 flask	

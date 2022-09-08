@@ -3,7 +3,7 @@ from datetime import datetime, date
 from flask import render_template, session, url_for, request, redirect, flash, session, g
 from .Forms import Login_form, Patient_create, Patient_delete, delete_result, Patient_update, issue_medicine_form, \
     add_diagnosis, Appointment_create, Doctor_create
-from .Models import UserStore, Patient_test, Patient_Medicine, Patient_details, Diagnosis, Medicine, Doctor_details
+from .Models import UserStore, Patient_test, Patient_Medicine, Patient_details, Diagnosis, Medicine, Doctor_details, Appointments
 from .Config import db
 
 # store patient ID for querying
@@ -87,20 +87,27 @@ def appointment():
     speciality = [doctor.speciality for doctor in doctors]
     form.doctor_name.choices = choices=doctor_choices
     if request.method == 'POST':
+
         if form.validate_on_submit():
-            ssn_id = form.ssn_id.data
-            name = form.patient_name.data
-            age = form.patient_age.data
-            date = form.date.data
-            address = form.address.data
-            state = request.form.get('stt')
-            city = request.form.get('state_list')
+            doctor_name = form.doctor_name.data
+            patient_name = form.patient_name.data
+            doctor_specialization = form.doctor_specialization.data
+            hemo = form.hemo.data
+            bmi = form.bmi.data
+            platelets = form.platelets.data
+            blood_sugar = form.blood_sugar.data
+            blood_pressure = form.blood_pressure.data
             # Add the patient to the database
-            details = Patient_details(
-                name, age, ssn_id, date, bed_type, address, city, state, status="Admitted")
-            db.session.add(details)
-            db.session.commit()
-            flash("Registration successfully", "success")
+
+            appointments_for_doctors = Appointments.query.filter_by(doctor_name=doctor_name).count()
+            print(f'Already Booked Appointsments for {doctor_name}: {appointments_for_doctors}')
+            if appointments_for_doctors >= 15:
+                flash("Doctor is pre-booked", "warning")
+            else:
+                details = Appointments(patient_name,doctor_name,doctor_specialization,hemo,bmi,platelets,blood_sugar,blood_pressure)
+                db.session.add(details)
+                db.session.commit()
+                flash("Appointment Created successfully", "success")
     return render_template("Appointment_patient.html", title="Create Appointment", form=form)
 
 
