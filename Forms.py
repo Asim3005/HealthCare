@@ -110,6 +110,7 @@ class Patient_create(FlaskForm):
         'DEP1', 'dep2'), ('single room', 'single room')], validators=[DataRequired('select ward type')])
     address = StringField('enter address', validators=[
                           DataRequired('enter the address')])
+    password = StringField("Enter Password", validators=[DataRequired("Password REquired")])
     submit = SubmitField('create')
 
     def validate_date(form, date):
@@ -216,17 +217,17 @@ class Patient_update(FlaskForm):
 
 
 # class for medicine issuing
-class issue_medicine_form(FlaskForm):
-    medicine = Medicine.query.all()
-    meds = []
-    for med in medicine:
-        meds.append(med.medicine_name)
-    #medicine_name=StringField('Medicine name',validators=[DataRequired('Please enter medicine name '),check_alpha('medicine name has to be alphabet only')])
-    medicine_name = SelectField(
-        'Select a medicine', choices=[], validators=[DataRequired()])
-    quantity = IntegerField('QUANTITY', widget=widgets.Input(input_type="number"), validators=[
-                            DataRequired('Please enter quantity'), check_med('medicine not found')])
-    submit = SubmitField('Add')
+# class issue_medicine_form(FlaskForm):
+#     medicine = Medicine.query.all()
+#     meds = []
+#     for med in medicine:
+#         meds.append(med.medicine_name)
+#     #medicine_name=StringField('Medicine name',validators=[DataRequired('Please enter medicine name '),check_alpha('medicine name has to be alphabet only')])
+#     medicine_name = SelectField(
+#         'Select a medicine', choices=[], validators=[DataRequired()])
+#     quantity = IntegerField('QUANTITY', widget=widgets.Input(input_type="number"), validators=[
+#                             DataRequired('Please enter quantity'), check_med('medicine not found')])
+#     submit = SubmitField('Add')
 
 
 class add_diagnosis(FlaskForm):

@@ -11,6 +11,10 @@ class UserStore(db.Model, UserMixin):
     date_created = db.Column(db.DateTime, nullable=False,
                              default=datetime.utcnow)
 
+    def __init__(self, login, password):
+        self.login = login
+        self.password = password
+
     def __repr__(self):
         return 'User ' + str(self.id)
 
@@ -21,11 +25,13 @@ class Doctor_details(db.Model):
     ssn_id = db.Column(db.String(45), nullable=False, unique=True)
     speciality = db.Column(db.String(100), nullable=False)
     experience = db.Column(db.String(500), nullable=False)
+    login_type = db.Column(db.String(5), nullable = False, default= 'D')
 
-    def __init__(self, name, ssn_id, speciality, experience):
+    def __init__(self, name, ssn_id, speciality, experience, login_type):
         self.name = name
         self.speciality = speciality
         self.ssn_id = ssn_id
+        self.login_type = login_type
         self.experience = experience
 
     def __repr__(self):
@@ -72,8 +78,10 @@ class Patient_details(db.Model):
     city = db.Column(db.String(45), nullable=False)
     state = db.Column(db.String(45), nullable=False)
     status = db.Column(db.String(45), nullable=False)
+    login_type = db.Column(db.String(5), nullable = False, default = 'P')
 
-    def __init__(self, name, age, ssn_id, admission_date, bed_type, address, city, state, status):
+
+    def __init__(self, name, age, ssn_id, admission_date, bed_type, address, city, state, login_type, status):
 
         self.name = name
         self.age = age
@@ -84,6 +92,7 @@ class Patient_details(db.Model):
         self.city = city
         self.state = state
         self.status = status
+        self.login_type = login_type
 
     def __repr__(self):
         return 'Patient ' + str(self.id)

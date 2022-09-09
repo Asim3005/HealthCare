@@ -36,6 +36,14 @@
                      {% endfor %}
                 </div>
                 <div class="form-group">
+                    {{"Password"}}
+                    {{form.password(class_="form-control",placeholder="Password")}}
+                    {% for err in form.password.errors %}
+                    <span style="color: red;">[{{ err }}]</span>
+
+                     {% endfor %}
+                </div>
+                <div class="form-group">
                     {{"CNIC No"}}
                     {{form.ssn_id(class_="form-control",placeholder="CNIC")}}
                     {% for err in form.ssn_id.errors %}

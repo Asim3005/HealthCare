@@ -1,9 +1,9 @@
 from . import app
 from datetime import datetime, date, time, timedelta
 from flask import render_template, session, url_for, request, redirect, flash, session, g
-from .Forms import Login_form, Patient_create, Patient_delete, delete_result, Patient_update, issue_medicine_form, \
+from .Forms import Login_form, Patient_create, Patient_delete, delete_result, Patient_update, \
     add_diagnosis, Appointment_create, Doctor_create
-from .Models import UserStore, Patient_test, Patient_Medicine, Patient_details, Diagnosis, Medicine, Doctor_details, Appointments
+from .Models import UserStore, Patient_test, Patient_Medicine, Patient_details, Diagnosis, Doctor_details, Appointments
 from .Config import db
 
 # store patient ID for querying
@@ -26,15 +26,17 @@ def check_session():
         return None
     else:
         stakeholder_type = session['user'][-1]
-        if stakeholder_type == 'A':
-            session['stakeholder'] = 'registration_desk_executive'
-            return 'registration_desk_executive'
-        elif stakeholder_type == 'D':
-            session['stakeholder'] = 'diagnostic_executive'
-            return 'diagnostic_executive'
+        print(f'User = {session["user"]}')
+        print(f'StakeHolder Type = {stakeholder_type}')
+        if stakeholder_type == 'D':
+            session['stakeholder'] = 'Doctor'
+            return 'Doctor'
         elif stakeholder_type == 'P':
-            session['stakeholder'] = 'pharmacy_executive'
-            return 'pharmacy_executive'
+            session['stakeholder'] = 'Patient'
+            return 'Patient'
+        # elif stakeholder_type == 'P':
+        #     session['stakeholder'] = 'pharmacy_executive'
+        #     return 'pharmacy_executive'
 
 
 # ==================================================================================
@@ -170,12 +172,15 @@ def create_patient():
             address = form.address.data
             state = request.form.get('stt')
             city = request.form.get('state_list')
+            password = form.password.data
             # Add the patient to the database
             details = Patient_details(
-                name, age, ssn_id, date, bed_type, address, city, state, status="Admitted")
+                name, age, ssn_id, date, bed_type, address, city, state, "P", status="Admitted")
             db.session.add(details)
+            db.session.add(UserStore(ssn_id+'@P',password))
             db.session.commit()
             flash("Registration successfully", "success")
+
             return redirect(url_for('appointment'))
     return render_template("create_patient.html", title="Create Patient", form=form)
 
@@ -193,12 +198,13 @@ def create_doctor():
     if request.method == 'POST':
         if form.validate_on_submit():
             doctor_name = form.doctor_name.data
+            login_type = 'D'
             doctor_speciality = form.doctor_speciality.data
             qualify_n_experience = form.qualify_n_experience.data
             ssn = form.ssn_id.data
 
             # Add the patient to the database
-            details = Doctor_details(doctor_name, ssn, doctor_speciality, qualify_n_experience)
+            details = Doctor_details(doctor_name, ssn, doctor_speciality, qualify_n_experience, login_type='D')
             db.session.add(details)
             db.session.commit()
             flash("Registration successfully", "success")
@@ -447,39 +453,39 @@ def get_patient():
     return render_template("get_patient_details.html", title="Get Patient Details", form=form)
 
 
-@app.route("/IssueMedicine", methods=["GET", "POST"])
-def issue_medicine():
-    # Check that an authorised user only can access this functionality
-    if check_session() != 'pharmacy_executive':
-        flash('You are not authorised to access that! Please login with proper credentials.', 'danger')
-        return redirect(url_for('main'))
-    global issue_med
-    global pid
-    form = issue_medicine_form()
-    form.medicine_name.choices = []
-    medicine = Medicine.query.all()
-    for med in medicine:
-        # Populate the medicine select form
-        form.medicine_name.choices += [(med.medicine_name, med.medicine_name + ' || Qty: ' + str(med.medicine_quantity))]
-    if form.validate_on_submit():
-        name = form.medicine_name.data
-        quantity = form.quantity.data
-        # Query for medicines
-        med = Medicine.query.filter(
-            Medicine.medicine_name == form.medicine_name.data).first()
-        medid = med.id
-        rate = med.medicine_amount
-        # Update issue_med dict
-        if issue_med == None:
-            issue_med = {}
-            issue_med[name] = {
-                'name': name, 'quantity': quantity, 'medid': medid, 'rate': rate}
-        else:
-            issue_med[name] = {
-                'name': name, 'quantity': quantity, 'medid': medid, 'rate': rate}
-        flash("Medicine Added!", "success")
-        return render_template("issue_medicine.html", form=form, medicine=issue_med)
-    return render_template("issue_medicine.html", form=form, medicine=issue_med)
+# @app.route("/IssueMedicine", methods=["GET", "POST"])
+# def issue_medicine():
+#     # Check that an authorised user only can access this functionality
+#     if check_session() != 'pharmacy_executive':
+#         flash('You are not authorised to access that! Please login with proper credentials.', 'danger')
+#         return redirect(url_for('main'))
+#     global issue_med
+#     global pid
+#     form = issue_medicine_form()
+#     form.medicine_name.choices = []
+#     medicine = Medicine.query.all()
+#     for med in medicine:
+#         # Populate the medicine select form
+#         form.medicine_name.choices += [(med.medicine_name, med.medicine_name + ' || Qty: ' + str(med.medicine_quantity))]
+#     if form.validate_on_submit():
+#         name = form.medicine_name.data
+#         quantity = form.quantity.data
+#         # Query for medicines
+#         med = Medicine.query.filter(
+#             Medicine.medicine_name == form.medicine_name.data).first()
+#         medid = med.id
+#         rate = med.medicine_amount
+#         # Update issue_med dict
+#         if issue_med == None:
+#             issue_med = {}
+#             issue_med[name] = {
+#                 'name': name, 'quantity': quantity, 'medid': medid, 'rate': rate}
+#         else:
+#             issue_med[name] = {
+#                 'name': name, 'quantity': quantity, 'medid': medid, 'rate': rate}
+#         flash("Medicine Added!", "success")
+#         return render_template("issue_medicine.html", form=form, medicine=issue_med)
+#     return render_template("issue_medicine.html", form=form, medicine=issue_med)
 
 
 @app.route("/medicine_update", methods=["GET", "POST"])
