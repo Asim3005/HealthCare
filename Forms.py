@@ -73,8 +73,7 @@ class pass_val(FlaskForm):
 class Login_form(FlaskForm):
     username = StringField('username', validators=[DataRequired(), Length(
         min=8, message="ID should be atleast 8 characters long")])
-    password = PasswordField('password', validators=[DataRequired(), Length(min=10, max=10, message=""), pass_val(
-        message="password should have atleast 1 numeric and 1 special character and 1 uppercase and should be 10 characters long")])
+    password = PasswordField('password', validators=[DataRequired()])
     submit = SubmitField('login')
 
 
@@ -99,7 +98,7 @@ class check_length(FlaskForm):
 # class for patient registration form
 class Patient_create(FlaskForm):
     ssn_id = IntegerField('ssn id', validators=[DataRequired(
-        'please enter SSN ID in integer format'), check_length(message="id must be 9 digits long", min=9, max=9)])
+        'please enter SSN ID in integer format'), check_length(message="id must be atleast 9 digits long", min=9, max=20)])
     patient_name = StringField('patient name0', validators=[
                                DataRequired('please enter name')])
     patient_age = IntegerField('patient age', widget=widgets.Input(input_type="number"), validators=[DataRequired(
@@ -129,7 +128,7 @@ class Doctor_create(FlaskForm):
     doctor_name = StringField('doctor name0', validators=[
                                DataRequired('please enter name')])
     ssn_id = IntegerField('ssn id', validators=[DataRequired(
-        'please enter SSN ID in integer format'), check_length(message="id must be 9 digits long", min=9, max=9)])
+        'please enter SSN ID in integer format'), check_length(message="id must be atleast 9 digits long", min=9, max=20)])
 
     doctor_speciality = StringField('doctor speciality', validators=[
                                DataRequired('please enter specialites')])

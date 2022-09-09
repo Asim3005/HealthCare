@@ -22,6 +22,7 @@ def inject_now():
 
 
 def check_session():
+    print(f"session[user] = {session.get('user')}")
     if 'user' not in session or not session['user']:
         return None
     else:
@@ -54,9 +55,16 @@ def main():
         # Validate the form
         if form.validate_on_submit():
             # Check the credentials
-            if UserStore.query.filter_by(login=request.form.get('username'), password=request.form.get('password')).first():
-                flash("Login successful!", "success")
-                session['user'] = request.form.get('username')
+            # if UserStore.query.filter_by(login=request.form.get('username'), password=request.form.get('password')).first():
+            cnic = str(request.form.get('username'))
+            password=request.form.get('password')
+            if UserStore.query.filter_by(login=cnic+"@P", password=password).first():
+                flash("Welcome Patient!", "success")
+                session['user'] = cnic+'@P'
+                return redirect(url_for('main'))
+            elif UserStore.query.filter_by(login=cnic+"@D", password=password).first():
+                flash("Welcome Doctor!", "success")
+                session['user'] = cnic+'@D'
                 return redirect(url_for('main'))
             else:
                 flash("Invalid credentials!", "danger")
@@ -177,7 +185,7 @@ def create_patient():
             details = Patient_details(
                 name, age, ssn_id, date, bed_type, address, city, state, "P", status="Admitted")
             db.session.add(details)
-            db.session.add(UserStore(ssn_id+'@P',password))
+            db.session.add(UserStore(str(ssn_id)+'@P',password))
             db.session.commit()
             flash("Registration successfully", "success")
 

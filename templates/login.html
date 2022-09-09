@@ -8,7 +8,7 @@
             <form method="POST" action="/" novalidate>
                 {{ form.hidden_tag() }}
                 <div class="form-group">
-                   {{form.username(class_="form-control",placeholder="login id")}} 
+                   {{form.username(class_="form-control",placeholder="CNIC")}}
                    {% for err in form.username.errors%}
                    <span style="color:red">{{err}}</span>
                    {%endfor%}

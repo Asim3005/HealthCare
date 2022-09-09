@@ -18,14 +18,11 @@
     <h4> As a <span style="color: var(--darkless);">{{ session['stakeholder'] }}</span>, you have access to the following functionalities:</h4>
     <hr style="background-color: var(--origin); height: 1.5rem;"/>
     <ol style="list-style-position: inside;">
-        {% if session['stakeholder'] == 'registration_desk_executive' %}
+        {% if session['stakeholder'] == 'Doctor' %}
         <li>Creation, updation, deletion, viewing, searching and billing of patients</li>
         {% endif %}
-        {% if session['stakeholder'] == 'pharmacy_executive'%}
+        {% if session['stakeholder'] == 'Patient'%}
         <li>Viewing history of medicines given to the patient and prescribing new medicines</li>
-        {% endif %}
-        {% if session['stakeholder'] == 'diagnostic_executive'%}
-        <li>Viewing history of diagnostics conducted on the patients and adding new diagnostics</li>
         {% endif %}
     </ol>
 </div>
