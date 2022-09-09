@@ -1,5 +1,5 @@
 from . import app
-from datetime import datetime, date
+from datetime import datetime, date, time, timedelta
 from flask import render_template, session, url_for, request, redirect, flash, session, g
 from .Forms import Login_form, Patient_create, Patient_delete, delete_result, Patient_update, issue_medicine_form, \
     add_diagnosis, Appointment_create, Doctor_create
@@ -79,14 +79,28 @@ def appointment():
     # if check_session() != 'registration_desk_executive':
     #     flash('You are not authorised to access that! Please login with proper credentials.', 'danger')
     #     return redirect(url_for('main'))
+    def time_booked(inp, booked):
+        for booking in booked:
+            dt = booking.date
+            tm = booking.time
+            # print(f"Selected time {tm}")
+            book_dt_tm = datetime(dt.year, dt.month, dt.day, tm.hour, tm.minute)
+            limit1 = book_dt_tm+timedelta(minutes=30)
+            limit2 = book_dt_tm-timedelta(minutes=30)
+            # print(f"Limit Time {limit}")
+            if inp>=book_dt_tm and inp<limit1: # User Selected Time Falls within after 30 minutes of a booking
+                return True
+            elif inp>limit2 and inp<= book_dt_tm : # Selected Time Falls within previous 30 minutes
+                return True
+        return False
 
-    # If form has been submitted
-    # Check if Doctor Appointments Less than 15
     doctors = Doctor_details.query.all()
     form = Appointment_create()
     doctor_choices = [(doctor.name, doctor.name) for doctor in doctors]
     speciality = [doctor.speciality for doctor in doctors]
     form.doctor_name.choices = choices=doctor_choices
+
+    # If form has been submitted
     if request.method == 'POST':
 
         if form.validate_on_submit():
@@ -95,20 +109,32 @@ def appointment():
             doctor_specialization = form.doctor_specialization.data
             date = form.date.data
             time = form.time.data
-            print(f'Selected Data : {date}')
-            print(f'Selected Time : {time}')
             hemo = form.hemo.data
             bmi = form.bmi.data
             platelets = form.platelets.data
             blood_sugar = form.blood_sugar.data
             blood_pressure = form.blood_pressure.data
-            # Add the patient to the database
+            # Appointments.query.filter_by(time=)
+            inp_datetime = datetime(date.year, date.month, date.day, time.hour, time.minute)
+            now = datetime.now()
 
+            # print(f'timenow = {now}')
+            # print(f'input time = {inp_datetime}')
+            # Check if Doctor Appointments Less than 15
             appointments_for_doctors = Appointments.query.filter_by(doctor_name=doctor_name).count()
-            print(f'Already Booked Appointsments for {doctor_name}: {appointments_for_doctors}')
+            # print(f'Already Booked Appointsments for {doctor_name}: {appointments_for_doctors}')
+            booked = Appointments.query.filter(Appointments.date>= now.date())
             if appointments_for_doctors >= 15:
                 flash("Doctor is pre-booked", "warning")
+            # Check if Time Slot not available:
+            elif now>inp_datetime:
+                flash("Can't Change Past.", "warning")
+            elif time_booked(inp_datetime, booked):
+                flash("Time Slot is Booked", "warning")
+
+
             else:
+                # Add the patient to the database
                 details = Appointments(patient_name,doctor_name,doctor_specialization,date,time, hemo,bmi,platelets,blood_sugar,blood_pressure)
                 db.session.add(details)
                 db.session.commit()
