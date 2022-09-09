@@ -177,8 +177,6 @@ def create_patient():
             age = form.patient_age.data
             date = form.date.data
             address = form.address.data
-            state = request.form.get('stt')
-            city = request.form.get('state_list')
             password = form.password.data
             # Add the patient to the database
             details = Patient_details(

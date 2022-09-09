@@ -87,7 +87,6 @@ class Patient_details(db.Model):
         self.admission_date = admission_date
         self.address = address
         self.city = city
-        self.state = state
         self.status = status
         self.login_type = login_type
 

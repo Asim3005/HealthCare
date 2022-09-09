@@ -145,8 +145,7 @@ Email: [asimmushtaq3005@gmail.com](mailto:asimmushtaq3005@gmail.com)
 ## Acknowledgements
 
 *Thanks to.....*
-* [Bootstrap-Select](https://developer.snapappointments.com/bootstrap-select/)
-* [State-City JS](https://github.com/ajayrandhawa/Indian-States-Cities-Database)
+
 * [Choose an Open Source License](https://choosealicense.com)
 * [StackOverflow](https://stackoverflow.com)
 
@@ -157,6 +156,4 @@ Email: [asimmushtaq3005@gmail.com](mailto:asimmushtaq3005@gmail.com)
 [stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
 [issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=flat-square
 [issues-url]: https://github.com/othneildrew/Best-README-Template/issues
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/ramvigneshb
-[product-screenshot]: static/img/screenshot.png
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?s
