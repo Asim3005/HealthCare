@@ -1,8 +1,10 @@
+from flask_login import UserMixin
+
 from .Config import db
 from datetime import datetime
 
 # UserStore
-class UserStore(db.Model):
+class UserStore(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     login = db.Column(db.String(45), nullable=False)
     password = db.Column(db.String(45), nullable=False)
@@ -16,12 +18,14 @@ class UserStore(db.Model):
 class Doctor_details(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(45), nullable=False)
+    ssn_id = db.Column(db.String(45), nullable=False, unique=True)
     speciality = db.Column(db.String(100), nullable=False)
     experience = db.Column(db.String(500), nullable=False)
 
-    def __init__(self, name, speciality, experience):
+    def __init__(self, name, ssn_id, speciality, experience):
         self.name = name
         self.speciality = speciality
+        self.ssn_id = ssn_id
         self.experience = experience
 
     def __repr__(self):

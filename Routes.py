@@ -176,6 +176,7 @@ def create_patient():
             db.session.add(details)
             db.session.commit()
             flash("Registration successfully", "success")
+            return redirect(url_for('appointment'))
     return render_template("create_patient.html", title="Create Patient", form=form)
 
 @app.route("/CreateDoctor", methods=['GET', 'POST'])
@@ -194,9 +195,10 @@ def create_doctor():
             doctor_name = form.doctor_name.data
             doctor_speciality = form.doctor_speciality.data
             qualify_n_experience = form.qualify_n_experience.data
+            ssn = form.ssn_id.data
 
             # Add the patient to the database
-            details = Doctor_details(doctor_name, doctor_speciality, qualify_n_experience)
+            details = Doctor_details(doctor_name, ssn, doctor_speciality, qualify_n_experience)
             db.session.add(details)
             db.session.commit()
             flash("Registration successfully", "success")

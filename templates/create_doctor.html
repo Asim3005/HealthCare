@@ -8,7 +8,7 @@
 <div class="container login-container">
     <div>
         <div class="login-form-2 text-center">
-            <h3>Patient Registration</h3>
+            <h3>Doctor Registration</h3>
             <form name="doctor" method="POST" action="/CreateDoctor" id="form1">
                 {{form.hidden_tag()}}
                 <div class="form-group">
@@ -17,6 +17,13 @@
                     {% for err in form.doctor_name.errors %}
                     <span style="color: red;">[{{ err }}]</span>
                     
+                     {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{"CNIC No"}}
+                    {{form.ssn_id(class_="form-control",placeholder="CNIC")}}
+                    {% for err in form.ssn_id.errors %}
+                    <span style="color: red;">[{{ err }}]</span>
                      {% endfor %}
                 </div>
                 <div class="form-group">
@@ -29,7 +36,7 @@
                 </div>
                 <div class="form-group">
                     {{"Doctor Qualification and Experience"}}
-                    {{form.qualify_n_experience(class_="form-control",placeholder="Doctor Name")}}
+                    {{form.qualify_n_experience(class_="form-control",placeholder="Experience")}}
                     {% for err in form.qualify_n_experience.errors %}
                     <span style="color: red;">[{{ err }}]</span>
 

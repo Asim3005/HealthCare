@@ -127,6 +127,9 @@ class Patient_create(FlaskForm):
 class Doctor_create(FlaskForm):
     doctor_name = StringField('doctor name0', validators=[
                                DataRequired('please enter name')])
+    ssn_id = IntegerField('ssn id', validators=[DataRequired(
+        'please enter SSN ID in integer format'), check_length(message="id must be 9 digits long", min=9, max=9)])
+
     doctor_speciality = StringField('doctor speciality', validators=[
                                DataRequired('please enter specialites')])
     qualify_n_experience = StringField('qualify n experience', validators=[
