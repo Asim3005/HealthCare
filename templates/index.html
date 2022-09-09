@@ -19,10 +19,10 @@
     <hr style="background-color: var(--origin); height: 1.5rem;"/>
     <ol style="list-style-position: inside;">
         {% if session['stakeholder'] == 'Doctor' %}
-        <li>Creation, updation, deletion, viewing, searching and billing of patients</li>
+        <li>Viewing Appointments with you</li>
         {% endif %}
         {% if session['stakeholder'] == 'Patient'%}
-        <li>Viewing history of medicines given to the patient and prescribing new medicines</li>
+        <li>Create Appointments</li>
         {% endif %}
     </ol>
 </div>
