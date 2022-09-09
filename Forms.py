@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, IntegerField, SelectField, FloatField
-from wtforms.validators import DataRequired, Email, Length, ValidationError
+from wtforms import StringField, PasswordField, SubmitField, IntegerField, SelectField, FloatField, TimeField
+from wtforms.validators import DataRequired, Email, Length, ValidationError, InputRequired
 import datetime
 from wtforms.fields.html5 import DateField, widgets
 from .Models import UserStore, Patient_test, Patient_Medicine, Patient_details, Diagnosis, Medicine
@@ -143,7 +143,7 @@ class Appointment_create(FlaskForm):
                                DataRequired('please enter name')])
     date = DateField('enter date', format="%Y-%m-%d", validators=[
         DataRequired('please enter date')], default=datetime.date.today())
-
+    time = TimeField("time", validators=[DataRequired("Enter Time")])
     hemo = FloatField('hemoglobin')
     bmi = FloatField('bmi')
     platelets = FloatField('platelets')

@@ -81,6 +81,7 @@ def appointment():
     #     return redirect(url_for('main'))
 
     # If form has been submitted
+    # Check if Doctor Appointments Less than 15
     doctors = Doctor_details.query.all()
     form = Appointment_create()
     doctor_choices = [(doctor.name, doctor.name) for doctor in doctors]
@@ -93,6 +94,9 @@ def appointment():
             patient_name = form.patient_name.data
             doctor_specialization = form.doctor_specialization.data
             date = form.date.data
+            time = form.time.data
+            print(f'Selected Data : {date}')
+            print(f'Selected Time : {time}')
             hemo = form.hemo.data
             bmi = form.bmi.data
             platelets = form.platelets.data
@@ -105,7 +109,7 @@ def appointment():
             if appointments_for_doctors >= 15:
                 flash("Doctor is pre-booked", "warning")
             else:
-                details = Appointments(patient_name,doctor_name,doctor_specialization,date, hemo,bmi,platelets,blood_sugar,blood_pressure)
+                details = Appointments(patient_name,doctor_name,doctor_specialization,date,time, hemo,bmi,platelets,blood_sugar,blood_pressure)
                 db.session.add(details)
                 db.session.commit()
                 flash("Appointment Created successfully", "success")
