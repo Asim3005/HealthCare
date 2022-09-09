@@ -1,10 +1,9 @@
-from flask_login import UserMixin
 
 from .Config import db
 from datetime import datetime
 
 # UserStore
-class UserStore(db.Model, UserMixin):
+class UserStore(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     login = db.Column(db.String(45), nullable=False)
     password = db.Column(db.String(45), nullable=False)
