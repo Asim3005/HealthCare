@@ -105,8 +105,6 @@ class Patient_create(FlaskForm):
         'please enter age'), check_length(min=1, max=3, message="age should be 1-3 digits long")])
     date = DateField('enter date', format="%Y-%m-%d", validators=[
                      DataRequired('please enter date')], default=datetime.date.today())
-    Type_of_bed = SelectField('bed type0', choices=[('dep0', 'dep0'), (
-        'DEP1', 'dep2'), ('single room', 'single room')], validators=[DataRequired('select ward type')])
     address = StringField('enter address', validators=[
                           DataRequired('enter the address')])
     password = StringField("Enter Password", validators=[DataRequired("Password REquired")])

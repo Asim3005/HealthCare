@@ -176,20 +176,19 @@ def create_patient():
             name = form.patient_name.data
             age = form.patient_age.data
             date = form.date.data
-            bed_type = form.Type_of_bed.data
             address = form.address.data
             state = request.form.get('stt')
             city = request.form.get('state_list')
             password = form.password.data
             # Add the patient to the database
             details = Patient_details(
-                name, age, ssn_id, date, bed_type, address, city, state, "P", status="Admitted")
+                name, age, ssn_id, date, address, city, state, "P", status="Admitted")
             db.session.add(details)
             db.session.add(UserStore(str(ssn_id)+'@P',password))
             db.session.commit()
             flash("Registration successfully", "success")
 
-            return redirect(url_for('appointment'))
+            # return redirect(url_for('appointment'))
     return render_template("create_patient.html", title="Create Patient", form=form)
 
 @app.route("/CreateDoctor", methods=['GET', 'POST'])
@@ -197,9 +196,9 @@ def create_doctor():
 
 
     # Check that an authorised user only can access this functionality
-    # if check_session() != 'registration_desk_executive':
-    #     flash('You are not authorised to access that! Please login with proper credentials.', 'danger')
-    #     return redirect(url_for('main'))
+    if check_session() == 'Patient':
+        flash('You are not authorised to access that! Please login with proper credentials.', 'danger')
+        return redirect(url_for('main'))
 
     # If form has been submitted
     form = Doctor_create()

@@ -14,7 +14,6 @@
 
                 <div class="form-group">
                     {{"Patient Name"}}
-                    {{form.patient_name.label}}
                     {{form.patient_name(class_="form-control",placeholder="Patient Name")}}
                     {% for err in form.patient_name.errors %}
                     <span style="color: red;">[{{ err }}]</span>
@@ -22,7 +21,6 @@
                 </div>
                 <div class="form-group">
                     {{"Doctor Name"}}
-                    {{form.doctor_name.label}}
                     {{form.doctor_name(class_="form-control",placeholder="Doctor Name")}}
                     {% for err in form.doctor_name.errors %}
                     <span style="color: red;">[{{ err }}]</span>
@@ -30,7 +28,6 @@
                 </div>
                 <div class="form-group">
                     {{"Doctor Specialization"}}
-                    {{form.doctor_specialization.label}}
                     {{form.doctor_specialization(class_="form-control",placeholder="Doctor Name")}}
                     {% for err in form.doctor_specialization.errors %}
                     <span style="color: red;">[{{ err }}]</span>

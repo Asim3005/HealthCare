@@ -72,7 +72,6 @@ class Patient_details(db.Model):
     age = db.Column(db.Integer, nullable=False)
     ssn_id = db.Column(db.String(45), nullable=False, unique=True)
     admission_date = db.Column(db.Date, nullable=False)
-    bed_type = db.Column(db.String(45), nullable=False)
     address = db.Column(db.String(45), nullable=False)
     city = db.Column(db.String(45), nullable=False)
     state = db.Column(db.String(45), nullable=False)
@@ -80,13 +79,12 @@ class Patient_details(db.Model):
     login_type = db.Column(db.String(5), nullable = False, default = 'P')
 
 
-    def __init__(self, name, age, ssn_id, admission_date, bed_type, address, city, state, login_type, status):
+    def __init__(self, name, age, ssn_id, admission_date, address, city, state, login_type, status):
 
         self.name = name
         self.age = age
         self.ssn_id = ssn_id
         self.admission_date = admission_date
-        self.bed_type = bed_type
         self.address = address
         self.city = city
         self.state = state
