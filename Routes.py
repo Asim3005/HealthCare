@@ -204,7 +204,10 @@ def create_doctor():
             ssn = form.ssn_id.data
 
             # Add the patient to the database
-            details = Doctor_details(doctor_name, ssn, doctor_speciality, qualify_n_experience, login_type='D')
+            details = Doctor_details(doctor_name, ssn, doctor_speciality, qualify_n_experience, login_type)
+            password = form.password.data
+            db.session.add(UserStore(str(ssn)+'@D',password))
+
             db.session.add(details)
             db.session.commit()
             flash("Registration successfully", "success")

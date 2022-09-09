@@ -42,6 +42,14 @@
 
                      {% endfor %}
                 </div>
+                <div class="form-group">
+                    {{"Password"}}
+                    {{form.password(class_="form-control",placeholder="Password")}}
+                    {% for err in form.password.errors %}
+                    <span style="color: red;">[{{ err }}]</span>
+
+                     {% endfor %}
+                </div>
                 <div class="form-group" style="display: inline;">
                     {{form.submit(class="btnSubmit")}}
                     <input type ="button" class="btnSubmit text-center" value="🔃 Reset " onclick="Reset()" style="float: right; width: 40%;"/>                    

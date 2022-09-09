@@ -135,6 +135,8 @@ class Doctor_create(FlaskForm):
                                DataRequired('please enter specialites')])
     qualify_n_experience = StringField('qualify n experience', validators=[
                                DataRequired('please enter experience')])
+    password = StringField("Enter Password", validators=[DataRequired("Password REquired")])
+
     submit = SubmitField('create')
 
 
