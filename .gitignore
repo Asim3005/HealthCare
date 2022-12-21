@@ -17,3 +17,5 @@ venv/
 HMS.db-journal
 
 docs/
+
+lib/

@@ -219,6 +219,38 @@ def create_doctor():
     return render_template("create_doctor.html", title="Create Doctor", form=form)
 
 
+@app.route("/ViewAppointments", methods=['GET'])
+def view_appointments():
+
+
+    # Check that an authorised user only can access this functionality
+    if check_session() == 'Patient':
+        flash('You are not authorised to access that! Please login with proper credentials.', 'danger')
+        return redirect(url_for('main'))
+
+    appointments = Appointments.query.all()
+    return render_template("view_appointment.html", title="View Appointments", appointments=appointments)
+    # If form has been submitted
+    form = Doctor_create()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            doctor_name = form.doctor_name.data
+            login_type = 'D'
+            doctor_speciality = form.doctor_speciality.data
+            qualify_n_experience = form.qualify_n_experience.data
+            ssn = form.ssn_id.data
+
+            # Add the patient to the database
+            details = Doctor_details(doctor_name, ssn, doctor_speciality, qualify_n_experience, login_type)
+            password = form.password.data
+            db.session.add(UserStore(str(ssn)+'@D',password))
+
+            db.session.add(details)
+            db.session.commit()
+            flash("Registration successfully", "success")
+    return render_template("create_doctor.html", title="Create Doctor", form=form)
+
+
 # ==================================================================================
 #                              Delete an existing patient
 # ==================================================================================
