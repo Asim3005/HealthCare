@@ -167,7 +167,7 @@ def appointment():
 def create_patient():
 
 
-    # Check that an authorised user only can access this functionality
+    # # Check that an authorised user only can access this functionality
     # if check_session() != 'registration_desk_executive':
     #     flash('You are not authorised to access that! Please login with proper credentials.', 'danger')
     #     return redirect(url_for('main'))
@@ -361,184 +361,14 @@ def view_appointments(id):
     appointments = Appointments.query.filter_by(doctor_name=doctor.name)
     return render_template("view_appointment.html", title="View Appointments", appointments=appointments)
     # If form has been submitted
-    form = Doctor_create()
-    if request.method == 'POST':
-        if form.validate_on_submit():
-            doctor_name = form.doctor_name.data
-            login_type = 'D'
-            doctor_speciality = form.doctor_speciality.data
-            qualify_n_experience = form.qualify_n_experience.data
-            ssn = form.ssn_id.data
-
-            # Add the patient to the database
-            details = Doctor_details(doctor_name, ssn, doctor_speciality, qualify_n_experience, login_type)
-            password = form.password.data
-            db.session.add(UserStore(str(ssn)+'@D',password))
-
-            db.session.add(details)
-            db.session.commit()
-            flash("Registration successfully", "success")
-    return render_template("create_doctor.html", title="Create Doctor", form=form)
-
-
+   
 # ==================================================================================
 #                              Delete an existing patient
 # ==================================================================================
 
-
-# @app.route("/DeletePatient", methods=["GET", "POST"])
-# def delete_patient():
-
-#     # Check that an authorised user only can access this functionality
-#     # if check_session() != 'registration_desk_executive':
-#     #     flash('You are not authorised to access that! Please login with proper credentials.', 'danger')
-#     #     return redirect(url_for('main'))
-
-#     form = Patient_delete()
-#     if form.validate_on_submit():
-#         global pid
-#         pid = int(form.patient_id.data)
-#         # Query for patient_details
-#         patient = Patient_details.query.filter(
-#             Patient_details.id == int(form.patient_id.data))
-#         for patient_1 in patient:
-#             if patient_1:
-#                 form2 = delete_result()
-#                 flash("patient found", "success")
-#                 return render_template("delete_patient2.html", title="Delete patient", patient=patient, form=form2)
-#         flash("patient not found", "danger")
-#     return render_template("delete_patient.html", title="Delete Patient", form=form)
-
-
-# @app.route("/deletepatient2", methods=["GET", "POST"])
-# def delete_patient2():
-
-#     # Check that an authorised user only can access this functionality
-#     # if check_session() != 'registration_desk_executive':
-#     #     flash('You are not authorised to access that! Please login with proper credentials.', 'danger')
-#     #     return redirect(url_for('main'))
-
-#     form2 = delete_result()
-#     if form2.validate_on_submit():
-#         global pid
-#         print(pid)
-#         # delete query
-#         Patient_details.query.filter_by(id=pid).delete()
-#         db.session.commit()
-#         flash("patient deleted successfully", "success")
-
-#         return redirect(url_for('delete_patient'))
-#     else:
-#         flash("patient delete failed . Please try again", "danger")
-#         return redirect(url_for('delete_patient'))
 # ==================================================================================
 #                    Update the detains of an existing patient
 # ==================================================================================
-
-
-@app.route("/UpdatePatient", methods=["GET", "POST"])
-def update_patient():
-    flag = 0
-
-    # Check that an authorised user only can access this functionality
-    # if check_session() != 'registration_desk_executive':
-    #     flash('You are not authorised to access that! Please login with proper credentials.', 'danger')
-    #     return redirect(url_for('main'))
-
-    form = Patient_delete()
-    if form.validate_on_submit():
-        global pid
-        pid = int(form.patient_id.data)
-        # Query for patient details
-        patient = Patient_details.query.filter(
-            Patient_details.id == int(form.patient_id.data))
-        for patient_1 in patient:
-            if patient_1:
-                flash("patient found", "success")
-                flag = 1
-                # Display the update form
-                form2 = Patient_update(Type_of_bed=patient_1.bed_type, date=patient_1.admission_date,
-                                       address=patient_1.address, patient_name=patient_1.name, patient_age=patient_1.age)
-                return render_template("update_patient.html", title="Update Patient", form=form, form2=form2, flag=flag, patient_s=patient)
-        flash("Patient not found", "danger")
-    return render_template("update_patient.html", title="Update Patient", form=form, flag=flag)
-
-
-@app.route("/UpdatePatient2", methods=["GET", "POST"])
-def update_result():
-
-# Check that an authorised user only can access this functionality
-    # if check_session() != 'registration_desk_executive':
-    #     flash('You are not authorised to access that! Please login with proper credentials.', 'danger')
-    #     return redirect(url_for('main'))
-
-    form = Patient_update()
-    if request.method == "POST":
-        if form.validate_on_submit():
-            global pid
-            if request.form.get('stt') != "":
-                if request.form.get('state_list') == None or request.form.get('state_list') == "":
-                    # Query for patient Details
-                    patient = Patient_details.query.filter(
-                        Patient_details.id == pid)
-                    for patient_1 in patient:
-                        if patient_1:
-
-                            flag = 1
-                            flash(
-                                "You have to select city if you change state", "danger")
-                            form2 = Patient_update(Type_of_bed=patient_1.bed_type, date=patient_1.admission_date,
-                                                   address=patient_1.address, patient_name=patient_1.name, patient_age=patient_1.age)
-                            return render_template("update_patient.html", title="Update Patient", form=form, form2=form2, flag=flag, patient_s=patient)
-            if request.form.get('stt') == "":
-                name = form.patient_name.data
-                age = form.patient_age.data
-                date = form.date.data
-                bed_type = form.Type_of_bed.data
-                address = form.address.data
-                # Update the patient_details table
-                Patient_details.query.filter_by(id=pid).update({"name": name})
-                Patient_details.query.filter_by(
-                    id=pid).update({"admission_date": date})
-                Patient_details.query.filter_by(id=pid).update({"age": age})
-                Patient_details.query.filter_by(
-                    id=pid).update({"bed_type": bed_type})
-                Patient_details.query.filter_by(
-                    id=pid).update({"address": address})
-            else:
-                name = form.patient_name.data
-                age = form.patient_age.data
-                date = form.date.data
-                bed_type = form.Type_of_bed.data
-                address = form.address.data
-                city = request.form.get('state_list')
-                state = request.form.get('stt')
-                # Update the patient_details table
-                Patient_details.query.filter_by(id=pid).update({"name": name})
-                Patient_details.query.filter_by(
-                    id=pid).update({"admission_date": date})
-                Patient_details.query.filter_by(id=pid).update({"city": city})
-                Patient_details.query.filter_by(
-                    id=pid).update({"state": state})
-                Patient_details.query.filter_by(id=pid).update({"age": age})
-                Patient_details.query.filter_by(
-                    id=pid).update({"bed_type": bed_type})
-                Patient_details.query.filter_by(
-                    id=pid).update({"address": address})
-            # Commit the changes
-            db.session.commit()
-            flash("Patient update intiated successfully!", "success")
-            return redirect(url_for('update_patient'))
-        # Query for patient_details
-        patient = Patient_details.query.filter(Patient_details.id == pid)
-        for patient_1 in patient:
-            if patient_1:
-                flag = 1
-                flash("Please enter AGE in integer format and less than or equal to 3 digits in length!", "danger")
-                form2 = Patient_update(Type_of_bed=patient_1.bed_type, date=patient_1.admission_date,
-                                       address=patient_1.address, patient_name=patient_1.name, patient_age=patient_1.age)
-                return render_template("update_patient.html", title="Update Patient", form=form, form2=form2, flag=flag, patient_s=patient)
-
 
 # ==================================================================================
 #                   View all the admitted patients in record
