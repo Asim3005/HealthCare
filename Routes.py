@@ -3,8 +3,8 @@ from datetime import datetime, date, time, timedelta
 from flask import render_template, session, url_for, request, redirect, flash, session, g
 from .Forms import Login_form, Patient_create, Patient_delete, delete_result, Patient_update, \
     add_diagnosis, Appointment_create, Doctor_create, Update_Patient1_Form,  \
-    LeadToUpdate_Form, DeletePatient_Form, LeadToAppointments_Form
-from .Models import UserStore, Patient_test, Patient_Medicine, Patient_details, Diagnosis, Doctor_details, Appointments
+    LeadToUpdate_Form, DeletePatient_Form, LeadToAppointments_Form, PrescriptionForm
+from .Models import UserStore, Patient_test, Patient_Medicine, Patient_details, Diagnosis, Doctor_details, Appointments,Patient_medicine
 from .Config import db
 
 # store patient ID for querying
@@ -106,10 +106,13 @@ def appointment():
         return False
 
     doctors = Doctor_details.query.all()
+    patients = Patient_details.query.all()
     form = Appointment_create()
     doctor_choices = [(doctor.name, f"{doctor.name} | {doctor.speciality}") for doctor in doctors]
+    patient_choices = [(patient.name, f"{patient.name}") for patient in patients]
     speciality = [doctor.speciality for doctor in doctors]
-    form.doctor_name.choices = choices=doctor_choices
+    form.doctor_name.choices =doctor_choices
+    form.patient_name.choices =patient_choices
 
     # If form has been submitted
     if request.method == 'POST':
@@ -240,6 +243,50 @@ def leadto_update():
     form.ssn_id.choices = choices
 
     return render_template("lead_to_update.html", title="Update Patient", form=form)
+
+
+@app.route('/PrescribeMedicine/<patient_name>', methods=["GET", "POST"])
+def prescribe_medicine(patient_name):
+    if check_session() != 'Doctor':
+        flash('You are not authorised to access that! Please login with proper credentials.', 'danger')
+        return redirect(url_for('main'))
+    
+    form = PrescriptionForm()
+
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            name = form.name.data
+            amount = form.amount.data
+            dosage = form.dosage.data
+            
+            print(patient_name)
+            pat = Patient_details.query.filter_by(name=patient_name).first()
+            medicine = Patient_medicine(pat.id,name=name, amount=amount, dosage=dosage )
+
+            db.session.add(medicine)
+            db.session.commit()
+            flash(f"{name} prescribed to {patient_name}", "success")
+
+            return redirect(url_for('leadto_appointments'))
+
+
+    return render_template("medicine_prescription.html", title="Prescribe Medicine", form=form, patient_name=patient_name)
+
+# <---------------------------------------------------------------------------------------------->
+# <---------------------------------------------------------------------------------------------->
+# <---------------------------------------------------------------------------------------------->
+@app.route('/PrescribedMedicines/<patient_name>', methods=["GET"])
+def prescribed_medicine(patient_name):
+    if check_session() != 'Doctor':
+        flash('You are not authorised to access that! Please login with proper credentials.', 'danger')
+        return redirect(url_for('main'))
+
+    pat = Patient_details.query.filter_by(name=patient_name).first()
+    medicines = Patient_medicine.query.filter_by(patient_id=pat.id)
+
+
+
+    return render_template("medicine_prescribed.html", title="Prescribed Medicines", patient_name=patient_name, medicines=medicines)
 
 
 @app.route("/LeadtoAppointments", methods=["GET", "POST"])

@@ -107,6 +107,24 @@ class Patient_Medicine(db.Model):
     def __repr__(self):
         return 'P_medicine ' + str(self.id)
 
+class Patient_medicine(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    patient_id = db.Column(db.Integer, nullable = False)
+    name = db.Column(db.String(45), nullable=False)
+    amount = db.Column(db.Integer, nullable=False)
+    dosage = db.Column(db.String(100), nullable = True)
+
+    def __init__(self, patient_id, name, amount, dosage):
+        self.patient_id = patient_id
+        self.name = name
+        self.amount = amount
+        self.dosage = dosage
+        super().__init__()
+    
+    def __repr__(self):
+        return 'Medicine ' + str(self.id)
+ 
+
 # Medicine
 class Medicine(db.Model):
     id = db.Column(db.Integer, primary_key=True)

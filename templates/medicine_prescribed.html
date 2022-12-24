@@ -3,43 +3,29 @@
 {% block content %}
 <div class="text-center" style="margin-top: 0.5em;">
   <h3>
-    Appointments
+    Medicines Prescribed to {{patient_name}}
   </h3>
 </div>
 
 <table class="table table-hover table-bordered results table-striped text-center" style="border-color: var(--dark)">
   <thead>
     <tr>
-      <th>Patient ID</th>
-      <th>Patient Name</th>
-      <th>With Doctor</th>
-      <th>Time</th>
-      <th>Hemo</th>
-      <th>BMI</th>
-      <th>Platelets</th>
-      <th>Blood Sugar</th>
-      <th>Blood Pressure</th>
-      <th>Prescribed Medicines</th>
-      <th>Prescribe Medicine</th>
+      <th>No</th>
+      <th>Medicine Name</th>
+      <th>Amount</th>
+      <th>Dosage</th>
     </tr>
     <tr class="warning no-result">
       <td colspan="6"><i class="fa fa-warning"></i> No result</td>
     </tr>
   </thead>
   <tbody>
-    {% for a in appointments %}
+    {% for a in medicines %}
     <tr>
       <th scope="row">{{a.id}}</th>
-      <td>{{a.patient_name}}</td>
-      <td>{{a.doctor_name}}</td>
-      <td>{{a.date}} {{a.time}}</td>
-      <td>{{a.hemo}}</td>
-      <td>{{a.bmi}}</td>
-      <td>{{a.platelets}}</td>
-      <td>{{a.blood_sugar}}</td>
-      <td>{{a.blood_pressure}}</td>
-      <td><a href="{{ url_for('prescribed_medicine', patient_name = a.patient_name) }}">View Prescription</a></td>
-      <td><a href="{{ url_for('prescribe_medicine', patient_name = a.patient_name) }}">Prescribe Medicine</a></td>
+      <td>{{a.name}}</td>
+      <td>{{a.amount}}</td>
+      <td>{{a.dosage}}</td>
     </tr>
     {% endfor %}
   </tbody>

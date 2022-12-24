@@ -1,0 +1,56 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+<script src="../static/js/cities.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container login-container">
+    <div>
+        <div class="login-form-2 text-center">
+            <h3>Medicine for {{patient_name}}</h3>
+            <form name="patient" method="POST" action="{{ url_for('prescribe_medicine', patient_name=patient_name)}}" id="form1">
+                {{form.hidden_tag()}}
+                <div class="form-group">
+                    {{"Medicine Name"}}
+                    {{form.name(class_="form-control",placeholder="Medicine Name")}}
+                    {% for err in form.name.errors %}
+                    <span style="color: red;">[{{ err }}]</span>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{"Amount"}}
+                    {{form.amount(class_="form-control",placeholder="Medicine Amount")}}
+                    {% for err in form.amount.errors %}
+                    <span style="color: red;">[{{ err }}]</span>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{"Dosage"}}
+                    {{form.dosage(class_="form-control",placeholder="Medicine Dosage")}}
+                    {% for err in form.dosage.errors %}
+                    <span style="color: red;">[{{ err }}]</span>
+                    {% endfor %}
+                </div>
+                
+                <br>
+                <div class="form-group" style="display: inline;">
+                    <!--<input type="submit" class="btnSubmit" value="Create" style="float: left; width: 50%;"/>-->
+                    {{form.submit(class="btnSubmit")}}
+                    <input type="button" class="btnSubmit text-center" value="Reset " onclick="Reset()"
+                        style="float: right; width: 40%;" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    function Reset() {
+        document.getElementById("form1").reset();
+    }
+</script>
+<script language="javascript">print_state("sts");</script>
+{% endblock %}

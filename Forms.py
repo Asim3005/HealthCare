@@ -170,6 +170,13 @@ class Update_Patient1_Form(FlaskForm):
             raise ValidationError("Address can only contain alphabets, numbers, comma and periods!")
 
 
+class PrescriptionForm(FlaskForm):
+    name = StringField('medicine name0', validators=[
+                               DataRequired('please enter medicine name')])
+    amount = FloatField('amount', validators=[
+                               DataRequired('please enter medicine name')])
+    dosage = StringField('medicine dose0')
+    submit = SubmitField('Prescribe')
 
 class Doctor_create(FlaskForm):
     doctor_name = StringField('doctor name0', validators=[
@@ -187,7 +194,7 @@ class Doctor_create(FlaskForm):
 
 
 class Appointment_create(FlaskForm):
-    patient_name = StringField('patient name0', validators=[
+    patient_name = SelectField('patient name0', validators=[
                                DataRequired('please enter your name')])
     doctor_name = SelectField('doctor name0', validators=[
                                DataRequired('please select doctor')])
