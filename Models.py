@@ -47,7 +47,7 @@ class Appointments(db.Model):
     bmi = db.Column(db.Float, nullable = True)
     platelets = db.Column(db.Float, nullable = True)
     blood_sugar = db.Column(db.Float, nullable = True)
-    blood_pressure = db.Column(db.Float, nullable = True)
+    blood_pressure = db.Column(db.String(45), nullable = True)
 
     def __init__(self,patient_name, doctor_name, doctor_specialization, date,time, hemo, bmi, platelets, blood_sugar, blood_pressure):
         self.blood_sugar = blood_sugar
@@ -87,6 +87,7 @@ class Patient_details(db.Model):
         self.admission_date = admission_date
         self.address = address
         self.city = city
+        self.state = state
         self.status = status
         self.login_type = login_type
 

@@ -81,7 +81,7 @@
                             ><a
                                 class="dropdown-item"
                                 role="presentation"
-                                href="/UpdatePatient"
+                                href="{{url_for('leadto_update')}}"
                         >Update Patient</a
                         ><a
                                 class="dropdown-item"
@@ -116,7 +116,7 @@
                         <a
                                 class="dropdown-item"
                                 role="presentation"
-                                href="/ViewAppointments"
+                                href="{{ url_for('leadto_appointments') }}"
                         >View Appointments</a>
                         </div>
                     </li>

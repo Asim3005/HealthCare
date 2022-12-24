@@ -10,7 +10,7 @@
         <div class="login-form-2 text-center">
             <h3>Update patient</h3>
             {% if flag==0 %}
-            <form name="patient" method="POST" action={{url_for('update_patient')}} id="form1" novalidate>
+            <form name="patient" method="POST" action="{{ url_for('update_patient') }}" id="form1" novalidate>
                 
                 {{form.hidden_tag()}}
                 

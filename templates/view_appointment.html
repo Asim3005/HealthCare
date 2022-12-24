@@ -1,33 +1,27 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<div class="form-group" id="search_bar">
-    <input type="text" class="search form-control" placeholder="Filter by Patient ID">
-    <span class="counter"></span>
-</div>
-<br/>
-
 <table class="table table-hover table-bordered results table-striped text-center" style="border-color: var(--dark)">
   <thead>
     <tr>
       <th>Patient ID</th>
-      <th>Name</th>
-      <th>Age</th>
-      <th>Address</th>
-      <th>DOJ</th>
+      <th>Patient Name</th>
+      <th>With Doctor</th>
+      <th>Time</th>
+      <th>Additional Info</th>
     </tr>
     <tr class="warning no-result">
       <td colspan="6"><i class="fa fa-warning"></i> No result</td>
     </tr>
   </thead>
   <tbody>
-    {% for p in patients %}
+    {% for a in appointments %}
     <tr>
-      <th scope="row">{{p.id}}</th>
-      <td>{{p.name}}</td>
-      <td>{{p.age}}</td>
-      <td>{{p.address}}, {{p.city}}, {{p.state}}</td>
-      <td>{{p.admission_date}}</td>
+      <th scope="row">{{a.id}}</th>
+      <td>{{a.patient_name}}</td>
+      <td>{{a.doctor_name}}</td>
+      <td>{{a.date}} {{a.time}}</td>
+      <td>{{a.hemo}}, {{a.bmi}}</td>
     </tr>
     {% endfor %}
   </tbody>
@@ -35,7 +29,7 @@
 
 <div class="text-center" style="margin-top: 0.5em;">
   <h3>
-    {{ patients.count() }} Patients in Record!
+    Appointments
   </h3>
 </div>
 {% endblock %}

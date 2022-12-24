@@ -107,6 +107,10 @@ class Patient_create(FlaskForm):
                      DataRequired('please enter date')], default=datetime.date.today())
     address = StringField('enter address', validators=[
                           DataRequired('enter the address')])
+    city = StringField('enter city', validators=[
+                          DataRequired('enter the city')])
+    state = StringField('enter state', validators=[
+                          DataRequired('enter the states')])
     password = StringField("Enter Password", validators=[DataRequired("Password REquired")])
     submit = SubmitField('create')
 
@@ -121,6 +125,51 @@ class Patient_create(FlaskForm):
     def validate_address(form,address):
         if not re.match("^[a-zA-Z0-9,. ]*$", address.data):
             raise ValidationError("Address can only contain alphabets, numbers, comma and periods!")
+
+class LeadToUpdate_Form(FlaskForm):
+    ssn_id = SelectField('ssn id')
+    submit = SubmitField('Go')
+
+class LeadToAppointments_Form(FlaskForm):
+    doctor_name = SelectField('ssn id')
+    submit = SubmitField('Go')
+
+
+class DeletePatient_Form(FlaskForm):
+    ssn_id = SelectField('ssn id')
+    submit = SubmitField('Delete')
+
+
+class Update_Patient1_Form(FlaskForm):
+    ssn_id = IntegerField('ssn id', validators=[DataRequired(
+        'please enter SSN ID in integer format')])
+    patient_name = StringField('patient name0', validators=[
+                               DataRequired('please enter name')])
+    patient_age = IntegerField('patient age', widget=widgets.Input(input_type="number"), validators=[DataRequired(
+        'please enter age'), check_length(min=1, max=3, message="age should be 1-3 digits long")])
+    date = DateField('enter date', format="%Y-%m-%d", validators=[
+                     DataRequired('please enter date')], default=datetime.date.today())
+    address = StringField('enter address', validators=[
+                          DataRequired('enter the address')])
+    city = StringField('enter city', validators=[
+                          DataRequired('enter the city')])
+    state = StringField('enter state', validators=[
+                          DataRequired('enter the states')])
+    submit = SubmitField('Update')
+
+    def validate_date(form, date):
+        if date.data > datetime.date.today():
+            raise ValidationError("Date of Admission cannot exceed today's date!")
+    
+    def validate_patient_name(form,patient_name):
+        if not patient_name.data.isalpha():
+            raise ValidationError("Name cannot contain numbers/ symbols")
+
+    def validate_address(form,address):
+        if not re.match("^[a-zA-Z0-9,. ]*$", address.data):
+            raise ValidationError("Address can only contain alphabets, numbers, comma and periods!")
+
+
 
 class Doctor_create(FlaskForm):
     doctor_name = StringField('doctor name0', validators=[
@@ -142,8 +191,6 @@ class Appointment_create(FlaskForm):
                                DataRequired('please enter your name')])
     doctor_name = SelectField('doctor name0', validators=[
                                DataRequired('please select doctor')])
-    doctor_specialization = StringField('doctor_spec name0', validators=[
-                               DataRequired('please enter name')])
     date = DateField('enter date', format="%Y-%m-%d", validators=[
         DataRequired('please enter date')], default=datetime.date.today())
     time = TimeField("time", validators=[DataRequired("Enter Time")])
@@ -151,7 +198,7 @@ class Appointment_create(FlaskForm):
     bmi = FloatField('bmi')
     platelets = FloatField('platelets')
     blood_sugar = FloatField('blood_sugar')
-    blood_pressure = FloatField('blood_pressure')
+    blood_pressure = StringField('blood_pressure')
     # appointer_father_name = StringField('appointer name1', validators=[
     #                            DataRequired('please enter name')])
     # patient_age = IntegerField('patient age', widget=widgets.Input(input_type="number"), validators=[DataRequired(

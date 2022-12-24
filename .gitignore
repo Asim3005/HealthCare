@@ -18,4 +18,5 @@ HMS.db-journal
 
 docs/
 
-lib/
+*/lib/*
+lib

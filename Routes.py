@@ -2,7 +2,8 @@ from . import app
 from datetime import datetime, date, time, timedelta
 from flask import render_template, session, url_for, request, redirect, flash, session, g
 from .Forms import Login_form, Patient_create, Patient_delete, delete_result, Patient_update, \
-    add_diagnosis, Appointment_create, Doctor_create
+    add_diagnosis, Appointment_create, Doctor_create, Update_Patient1_Form,  \
+    LeadToUpdate_Form, DeletePatient_Form, LeadToAppointments_Form
 from .Models import UserStore, Patient_test, Patient_Medicine, Patient_details, Diagnosis, Doctor_details, Appointments
 from .Config import db
 
@@ -106,7 +107,7 @@ def appointment():
 
     doctors = Doctor_details.query.all()
     form = Appointment_create()
-    doctor_choices = [(doctor.name, doctor.name) for doctor in doctors]
+    doctor_choices = [(doctor.name, f"{doctor.name} | {doctor.speciality}") for doctor in doctors]
     speciality = [doctor.speciality for doctor in doctors]
     form.doctor_name.choices = choices=doctor_choices
 
@@ -116,7 +117,6 @@ def appointment():
         if form.validate_on_submit():
             doctor_name = form.doctor_name.data
             patient_name = form.patient_name.data
-            doctor_specialization = form.doctor_specialization.data
             date = form.date.data
             time = form.time.data
             hemo = form.hemo.data
@@ -125,6 +125,10 @@ def appointment():
             blood_sugar = form.blood_sugar.data
             blood_pressure = form.blood_pressure.data
             # Appointments.query.filter_by(time=)
+            
+            doctor = Doctor_details.query.filter_by(name=doctor_name).first()
+
+            doctor_specialization = doctor.speciality
             inp_datetime = datetime(date.year, date.month, date.day, time.hour, time.minute)
             now = datetime.now()
 
@@ -177,6 +181,8 @@ def create_patient():
             age = form.patient_age.data
             date = form.date.data
             address = form.address.data
+            city = form.city.data
+            state = form.state.data
             password = form.password.data
             # Add the patient to the database
             details = Patient_details(
@@ -186,8 +192,130 @@ def create_patient():
             db.session.commit()
             flash("Registration successfully", "success")
 
-            # return redirect(url_for('appointment'))
+            return redirect(url_for('appointment'))
     return render_template("create_patient.html", title="Create Patient", form=form)
+
+
+@app.route("/DeletePatient", methods=["GET", "POST"])
+def leadto_delete():
+    if check_session() != 'Patient':
+        flash('You are not authorised to access that! Please login with proper credentials.', 'danger')
+        return redirect(url_for('main'))
+    
+    form = DeletePatient_Form()
+    if request.method == 'POST':
+        ssn_data = form.ssn_id.data
+        print("INITIATING REDIRECT")
+        try:
+            Patient_details.query.filter_by(ssn_id=ssn_data).delete()
+            UserStore.query.filter_by(login=str(ssn_data)+'@P').delete()
+            db.session.commit()
+            flash("Deleted successfully", "success")
+        except:
+            pass
+        return redirect(url_for('main'))
+    patients = Patient_details.query.all()
+    choices = [(patient.ssn_id, f"{patient.name} | {patient.ssn_id}") for patient in patients]
+
+    form.ssn_id.choices = choices
+
+    return render_template("delete_patient1.html", title="Delete Patient", form=form)
+
+
+
+@app.route("/LeadtoUpdate", methods=["GET", "POST"])
+def leadto_update():
+    if check_session() != 'Patient':
+        flash('You are not authorised to access that! Please login with proper credentials.', 'danger')
+        return redirect(url_for('main'))
+    
+    form = LeadToUpdate_Form()
+    if request.method == 'POST':
+        ssn_data = form.ssn_id.data
+        print("INITIATING REDIRECT")
+        return redirect(url_for('update_patient1', rec_ssn_data = ssn_data))
+    patients = Patient_details.query.all()
+    choices = [(patient.ssn_id, f"{patient.name} | {patient.ssn_id}") for patient in patients]
+
+    form.ssn_id.choices = choices
+
+    return render_template("lead_to_update.html", title="Update Patient", form=form)
+
+
+@app.route("/LeadtoAppointments", methods=["GET", "POST"])
+def leadto_appointments():
+    if check_session() != 'Doctor':
+        flash('You are not authorised to access that! Please login with proper credentials.', 'danger')
+        return redirect(url_for('main'))
+    
+    form = LeadToAppointments_Form()
+    if request.method == 'POST':
+        doctor_id = form.doctor_name.data
+        print("INITIATING REDIRECT")
+        return redirect(url_for('view_appointments', id=doctor_id))
+    
+    doctors = Doctor_details.query.all()
+    choices = [(doctor.id, f"{doctor.name} | {doctor.speciality}") for doctor in doctors]
+    print(choices)
+    form.doctor_name.choices = choices
+
+    return render_template("lead_to_appointments.html", title="Check Appointments", form=form)
+
+
+
+
+
+@app.route("/UpdatePatient1/<rec_ssn_data>", methods=['GET', 'POST'])
+def update_patient1(rec_ssn_data):
+    print(rec_ssn_data)
+
+
+    # Check that an authorised user only can access this functionality
+    if check_session() != 'Patient':
+        flash('You are not authorised to access that! Please login with proper credentials.', 'danger')
+        return redirect(url_for('main'))
+
+    # If form has been submitted
+    form = Update_Patient1_Form()
+    pat = Patient_details.query.filter_by(ssn_id=rec_ssn_data).first()
+    
+    
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            ssn_id = form.ssn_id.data
+            name = form.patient_name.data
+            age = form.patient_age.data
+            date = form.date.data
+            address = form.address.data
+            city = form.city.data
+            state = form.state.data
+            # Add the patient to the database
+            pat: Patient_details
+            pat = Patient_details.query.filter_by(ssn_id=ssn_id).first()
+            pat.name = name
+            pat.age = age
+            pat.admission_date = date
+            pat.address = address
+            pat.city = city
+            pat.state = state
+
+            db.session.add(pat)
+            db.session.commit()
+            flash("Updated successfully", "success")
+
+            return redirect(url_for('update_patient1', rec_ssn_data = ssn_id))
+
+    form.ssn_id.data = rec_ssn_data
+    form.patient_name.data = pat.name
+    form.patient_age.data = pat.age
+    form.date.data = pat.admission_date
+    form.address.data = pat.address
+    form.city.data = pat.city
+    form.state.data = pat.state
+
+
+    return render_template("update_patient1.html", title="Update Patient", form=form)
+
 
 @app.route("/CreateDoctor", methods=['GET', 'POST'])
 def create_doctor():
@@ -219,16 +347,18 @@ def create_doctor():
     return render_template("create_doctor.html", title="Create Doctor", form=form)
 
 
-@app.route("/ViewAppointments", methods=['GET'])
-def view_appointments():
+@app.route("/ViewAppointments/<id>", methods=['GET'])
+def view_appointments(id):
+    print("doctor database id = ", id)
 
 
     # Check that an authorised user only can access this functionality
-    if check_session() == 'Patient':
+    if check_session() != 'Doctor':
         flash('You are not authorised to access that! Please login with proper credentials.', 'danger')
         return redirect(url_for('main'))
 
-    appointments = Appointments.query.all()
+    doctor = Doctor_details.query.filter_by(id=id).first()
+    appointments = Appointments.query.filter_by(doctor_name=doctor.name)
     return render_template("view_appointment.html", title="View Appointments", appointments=appointments)
     # If form has been submitted
     form = Doctor_create()
@@ -256,51 +386,51 @@ def view_appointments():
 # ==================================================================================
 
 
-@app.route("/DeletePatient", methods=["GET", "POST"])
-def delete_patient():
+# @app.route("/DeletePatient", methods=["GET", "POST"])
+# def delete_patient():
 
-    # Check that an authorised user only can access this functionality
-    # if check_session() != 'registration_desk_executive':
-    #     flash('You are not authorised to access that! Please login with proper credentials.', 'danger')
-    #     return redirect(url_for('main'))
+#     # Check that an authorised user only can access this functionality
+#     # if check_session() != 'registration_desk_executive':
+#     #     flash('You are not authorised to access that! Please login with proper credentials.', 'danger')
+#     #     return redirect(url_for('main'))
 
-    form = Patient_delete()
-    if form.validate_on_submit():
-        global pid
-        pid = int(form.patient_id.data)
-        # Query for patient_details
-        patient = Patient_details.query.filter(
-            Patient_details.id == int(form.patient_id.data))
-        for patient_1 in patient:
-            if patient_1:
-                form2 = delete_result()
-                flash("patient found", "success")
-                return render_template("delete_patient2.html", title="Delete patient", patient=patient, form=form2)
-        flash("patient not found", "danger")
-    return render_template("delete_patient.html", title="Delete Patient", form=form)
+#     form = Patient_delete()
+#     if form.validate_on_submit():
+#         global pid
+#         pid = int(form.patient_id.data)
+#         # Query for patient_details
+#         patient = Patient_details.query.filter(
+#             Patient_details.id == int(form.patient_id.data))
+#         for patient_1 in patient:
+#             if patient_1:
+#                 form2 = delete_result()
+#                 flash("patient found", "success")
+#                 return render_template("delete_patient2.html", title="Delete patient", patient=patient, form=form2)
+#         flash("patient not found", "danger")
+#     return render_template("delete_patient.html", title="Delete Patient", form=form)
 
 
-@app.route("/deletepatient2", methods=["GET", "POST"])
-def delete_patient2():
+# @app.route("/deletepatient2", methods=["GET", "POST"])
+# def delete_patient2():
 
-    # Check that an authorised user only can access this functionality
-    # if check_session() != 'registration_desk_executive':
-    #     flash('You are not authorised to access that! Please login with proper credentials.', 'danger')
-    #     return redirect(url_for('main'))
+#     # Check that an authorised user only can access this functionality
+#     # if check_session() != 'registration_desk_executive':
+#     #     flash('You are not authorised to access that! Please login with proper credentials.', 'danger')
+#     #     return redirect(url_for('main'))
 
-    form2 = delete_result()
-    if form2.validate_on_submit():
-        global pid
-        print(pid)
-        # delete query
-        Patient_details.query.filter_by(id=pid).delete()
-        db.session.commit()
-        flash("patient deleted successfully", "success")
+#     form2 = delete_result()
+#     if form2.validate_on_submit():
+#         global pid
+#         print(pid)
+#         # delete query
+#         Patient_details.query.filter_by(id=pid).delete()
+#         db.session.commit()
+#         flash("patient deleted successfully", "success")
 
-        return redirect(url_for('delete_patient'))
-    else:
-        flash("patient delete failed . Please try again", "danger")
-        return redirect(url_for('delete_patient'))
+#         return redirect(url_for('delete_patient'))
+#     else:
+#         flash("patient delete failed . Please try again", "danger")
+#         return redirect(url_for('delete_patient'))
 # ==================================================================================
 #                    Update the detains of an existing patient
 # ==================================================================================
@@ -337,7 +467,7 @@ def update_patient():
 @app.route("/UpdatePatient2", methods=["GET", "POST"])
 def update_result():
 
-    # Check that an authorised user only can access this functionality
+# Check that an authorised user only can access this functionality
     # if check_session() != 'registration_desk_executive':
     #     flash('You are not authorised to access that! Please login with proper credentials.', 'danger')
     #     return redirect(url_for('main'))
