@@ -50,7 +50,7 @@ def check_session():
 @app.route("/login", methods=["GET", "POST"])
 def main():
     if check_session():
-        return render_template('index.html', user=session['user'])
+        return render_template('index.html', user=session['user'], patient_name=session['username'])
     form = Login_form()
     if request.method == 'POST':
         # Validate the form
@@ -62,10 +62,12 @@ def main():
             if UserStore.query.filter_by(login=cnic+"@P", password=password).first():
                 flash("Welcome Patient!", "success")
                 session['user'] = cnic+'@P'
+                session['username'] = Patient_details.query.filter_by(ssn_id=cnic).first().name
                 return redirect(url_for('main'))
             elif UserStore.query.filter_by(login=cnic+"@D", password=password).first():
                 flash("Welcome Doctor!", "success")
                 session['user'] = cnic+'@D'
+                session['username'] = Doctor_details.query.filter_by(ssn_id=cnic).first().name
                 return redirect(url_for('main'))
             else:
                 flash("Invalid credentials!", "danger")
@@ -156,7 +158,7 @@ def appointment():
                 db.session.add(details)
                 db.session.commit()
                 flash("Appointment Created successfully", "success")
-    return render_template("Appointment_patient.html", title="Create Appointment", form=form)
+    return render_template("Appointment_patient.html", title="Create Appointment", form=form, patient_name=session['username'])
 
 
     # return render_template("Appointment_patient.html", title="Create Patient")
@@ -171,9 +173,9 @@ def create_patient():
 
 
     # # Check that an authorised user only can access this functionality
-    # if check_session() != 'registration_desk_executive':
-    #     flash('You are not authorised to access that! Please login with proper credentials.', 'danger')
-    #     return redirect(url_for('main'))
+    if check_session() != 'None':
+        flash('Please Log out before creating new user.', 'danger')
+        return redirect(url_for('main'))
 
     # If form has been submitted
     form = Patient_create()
@@ -196,7 +198,7 @@ def create_patient():
             flash("Registration successfully", "success")
 
             return redirect(url_for('appointment'))
-    return render_template("create_patient.html", title="Create Patient", form=form)
+    return render_template("create_patient.html", title="Create Patient", form=form, patient_name=session['username'])
 
 
 @app.route("/DeletePatient", methods=["GET", "POST"])
@@ -222,7 +224,7 @@ def leadto_delete():
 
     form.ssn_id.choices = choices
 
-    return render_template("delete_patient1.html", title="Delete Patient", form=form)
+    return render_template("delete_patient1.html", title="Delete Patient", form=form, patient_name=session['username'])
 
 
 
@@ -242,7 +244,7 @@ def leadto_update():
 
     form.ssn_id.choices = choices
 
-    return render_template("lead_to_update.html", title="Update Patient", form=form)
+    return render_template("lead_to_update.html", title="Update Patient", form=form, patient_name=session['username'])
 
 
 @app.route('/PrescribeMedicine/<patient_name>', methods=["GET", "POST"])
@@ -277,7 +279,7 @@ def prescribe_medicine(patient_name):
 # <---------------------------------------------------------------------------------------------->
 @app.route('/PrescribedMedicines/<patient_name>', methods=["GET"])
 def prescribed_medicine(patient_name):
-    if check_session() != 'Doctor':
+    if check_session() == 'None':
         flash('You are not authorised to access that! Please login with proper credentials.', 'danger')
         return redirect(url_for('main'))
 
@@ -361,7 +363,7 @@ def update_patient1(rec_ssn_data):
     form.state.data = pat.state
 
 
-    return render_template("update_patient1.html", title="Update Patient", form=form)
+    return render_template("update_patient1.html", title="Update Patient", form=form, patient_name=session['username'])
 
 
 @app.route("/CreateDoctor", methods=['GET', 'POST'])
